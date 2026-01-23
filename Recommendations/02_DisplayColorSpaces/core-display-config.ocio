@@ -1,0 +1,331 @@
+ocio_profile_version: 2.4
+
+environment:
+  {}
+search_path: ""
+strictparsing: true
+luma: [0.2126, 0.7152, 0.0722]
+name: core-display-config-v1.0.0
+description: |
+  Color Space Encodings for Displays
+  ASWF Color Interop Forum Recommendation 2025-12
+
+roles:
+  aces_interchange: ACES2065-1
+  cie_xyz_d65_interchange: CIE XYZ-D65 - Display-referred
+  default: sRGB - Display
+  scene_linear: ACES2065-1
+
+file_rules:
+  - !<Rule> {name: Default, colorspace: default}
+
+displays:
+  sRGB - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: sRGB - Display}
+  Rec.1886 Rec.709 - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Rec.1886 Rec.709 - Display}
+  Display P3 - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Display P3 - Display}
+  Display P3 HDR - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Display P3 HDR - Display}
+  ST2084-P3-D65 - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: ST2084-P3-D65 - Display}
+  Rec.2100-PQ - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Rec.2100-PQ - Display}
+  Rec.2100-HLG - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Rec.2100-HLG - Display}
+  Gamma 2.2 Rec.709 - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Gamma 2.2 Rec.709 - Display}
+  AdobeRGB - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: AdobeRGB - Display}
+  P3-D65 - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: P3-D65 - Display}
+  DCDM G2.6-XYZ-D65 - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: DCDM G2.6-XYZ-D65 - Display}
+  DCDM ST2084-XYZ-D65 - Display:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: DCDM ST2084-XYZ-D65 - Display}
+  Linear Rec.709 - Display-referred:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Linear Rec.709 - Display-referred}
+  Linear P3-D65 - Display-referred:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Linear P3-D65 - Display-referred}
+  Linear Rec.2020 - Display-referred:
+    - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: Linear Rec.2020 - Display-referred}
+
+active_displays: []
+active_views: []
+inactive_colorspaces: [CIE XYZ-D65 - Display-referred]
+
+default_view_transform: Un-tone-mapped
+
+view_transforms:
+  - !<ViewTransform>
+    name: Un-tone-mapped
+    description: Converts between the scene and display reference spaces.
+    from_scene_reference: !<MatrixTransform> {matrix: [0.938279849277257, -0.0044514458123609, 0.0166275235867757, 0, 0.337368890787837, 0.729521566690265, -0.0668904574781025, 0, 0.00117395084968586, -0.00371070640205254, 1.09159450631225, 0, 0, 0, 0, 1]}
+
+display_colorspaces:
+  - !<ColorSpace>
+    name: sRGB - Display
+    aliases: [srgb_rec709_display]
+    interop_id: srgb_rec709_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [3.24096994190452, -1.53738317757009, -0.498610760293003, 0, -0.96924363628088, 1.87596750150772, 0.0415550574071756, 0, 0.0556300796969936, -0.203976958888976, 1.05697151424288, 0, 0, 0, 0, 1]}
+        - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: Rec.1886 Rec.709 - Display
+    aliases: [g24_rec709_display]
+    interop_id: g24_rec709_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [3.24096994190452, -1.53738317757009, -0.498610760293003, 0, -0.96924363628088, 1.87596750150772, 0.0415550574071756, 0, 0.0556300796969936, -0.203976958888976, 1.05697151424288, 0, 0, 0, 0, 1]}
+        - !<ExponentTransform> {value: 2.4, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: Display P3 - Display
+    aliases: [srgb_p3d65_display]
+    interop_id: srgb_p3d65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [2.49349691194143, -0.931383617919124, -0.402710784450717, 0, -0.829488969561575, 1.76266406031835, 0.0236246858419436, 0, 0.0358458302437845, -0.0761723892680418, 0.956884524007688, 0, 0, 0, 0, 1]}
+        - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: Display P3 HDR - Display
+    aliases: [srgbe_p3d65_display]
+    interop_id: srgbe_p3d65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: edr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [2.49349691194143, -0.931383617919124, -0.402710784450717, 0, -0.829488969561575, 1.76266406031835, 0.0236246858419436, 0, 0.0358458302437845, -0.0761723892680418, 0.956884524007688, 0, 0, 0, 0, 1]}
+        - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: ST2084-P3-D65 - Display
+    aliases: [pq_p3d65_display]
+    interop_id: pq_p3d65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: hdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [2.49349691194143, -0.931383617919124, -0.402710784450717, 0, -0.829488969561575, 1.76266406031835, 0.0236246858419436, 0, 0.0358458302437845, -0.0761723892680418, 0.956884524007688, 0, 0, 0, 0, 1]}
+        - !<BuiltinTransform> {style: CURVE - LINEAR_to_ST-2084}
+
+  - !<ColorSpace>
+    name: Rec.2100-PQ - Display
+    aliases: [pq_rec2020_display]
+    interop_id: pq_rec2020_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: hdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [1.71665118797127, -0.355670783776392, -0.25336628137366, 0, -0.666684351832489, 1.61648123663494, 0.0157685458139111, 0, 0.0176398574453108, -0.0427706132578085, 0.942103121235474, 0, 0, 0, 0, 1]}
+        - !<BuiltinTransform> {style: CURVE - LINEAR_to_ST-2084}
+
+  - !<ColorSpace>
+    name: Rec.2100-HLG - Display
+    aliases: [hlg_rec2020_display]
+    interop_id: hlg_rec2020_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: hdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [1.71665118797127, -0.355670783776392, -0.25336628137366, 0, -0.666684351832489, 1.61648123663494, 0.0157685458139111, 0, 0.0176398574453108, -0.0427706132578085, 0.942103121235474, 0, 0, 0, 0, 1]}
+        - !<MatrixTransform> {matrix: [100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 1]}
+        - !<MatrixTransform> {matrix: [0.00373719281884655, 0, 0, 0, 0, 0.00373719281884655, 0, 0, 0, 0, 0.00373719281884655, 0, 0, 0, 0, 1]}
+        - !<FixedFunctionTransform> {style: REC2100_Surround, params: [0.833333333333333]}
+        - !<BuiltinTransform> {style: CURVE - HLG-OETF}
+
+  - !<ColorSpace>
+    name: Gamma 2.2 Rec.709 - Display
+    aliases: [g22_rec709_display]
+    interop_id: g22_rec709_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [3.24096994190452, -1.53738317757009, -0.498610760293003, 0, -0.96924363628088, 1.87596750150772, 0.0415550574071756, 0, 0.0556300796969936, -0.203976958888976, 1.05697151424288, 0, 0, 0, 0, 1]}
+        - !<ExponentTransform> {value: 2.2, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: AdobeRGB - Display
+    aliases: [g22_adobergb_display]
+    interop_id: g22_adobergb_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [2.04158790381075, -0.56500697427886, -0.34473135077833, 0, -0.96924363628088, 1.87596750150772, 0.0415550574071756, 0, 0.0134442806320311, -0.118362392231018, 1.01517499439121, 0, 0, 0, 0, 1]}
+        - !<ExponentTransform> {value: 2.19921875, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: P3-D65 - Display
+    aliases: [g26_p3d65_display]
+    interop_id: g26_p3d65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [2.49349691194143, -0.931383617919124, -0.402710784450717, 0, -0.829488969561575, 1.76266406031835, 0.0236246858419436, 0, 0.0358458302437845, -0.0761723892680418, 0.956884524007688, 0, 0, 0, 0, 1]}
+        - !<ExponentTransform> {value: 2.6, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: DCDM G2.6-XYZ-D65 - Display
+    aliases: [g26_xyzd65_display]
+    interop_id: g26_xyzd65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [0.916555279740309, 0, 0, 0, 0, 0.916555279740309, 0, 0, 0, 0, 0.916555279740309, 0, 0, 0, 0, 1]}
+        - !<ExponentTransform> {value: 2.6, style: mirror, direction: inverse}
+
+  - !<ColorSpace>
+    name: DCDM ST2084-XYZ-D65 - Display
+    aliases: [pq_xyzd65_display]
+    interop_id: pq_xyzd65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: hdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<BuiltinTransform> {style: CURVE - LINEAR_to_ST-2084}
+
+  - !<ColorSpace>
+    name: Linear Rec.709 - Display-referred
+    aliases: [lin_rec709_display]
+    interop_id: lin_rec709_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: display-linear
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [3.24096994190452, -1.53738317757009, -0.498610760293003, 0, -0.96924363628088, 1.87596750150772, 0.0415550574071756, 0, 0.0556300796969936, -0.203976958888976, 1.05697151424288, 0, 0, 0, 0, 1]}
+
+  - !<ColorSpace>
+    name: Linear P3-D65 - Display-referred
+    aliases: [lin_p3d65_display]
+    interop_id: lin_p3d65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: display-linear
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [2.49349691194143, -0.931383617919124, -0.402710784450717, 0, -0.829488969561575, 1.76266406031835, 0.0236246858419436, 0, 0.0358458302437845, -0.0761723892680418, 0.956884524007688, 0, 0, 0, 0, 1]}
+
+  - !<ColorSpace>
+    name: Linear Rec.2020 - Display-referred
+    aliases: [lin_rec2020_display]
+    interop_id: lin_rec2020_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: false
+    categories: [file-io]
+    encoding: display-linear
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [1.71665118797127, -0.355670783776392, -0.25336628137366, 0, -0.666684351832489, 1.61648123663494, 0.0157685458139111, 0, 0.0176398574453108, -0.0427706132578085, 0.942103121235474, 0, 0, 0, 0, 1]}
+
+  - !<ColorSpace>
+    name: CIE XYZ-D65 - Display-referred
+    aliases: [lin_ciexyzd65_display, ocio:lin_ciexyzd65_display]
+    interop_id: ocio:lin_ciexyzd65_display
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    description: This is the config's display reference space, other transforms convert to this space.
+    isdata: false
+    categories: [inactive]
+    encoding: display-linear
+    allocation: uniform
+
+colorspaces:
+  - !<ColorSpace>
+    name: ACES2065-1
+    aliases: [lin_ap0_scene]
+    interop_id: lin_ap0_scene
+    family: ""
+    equalitygroup: ""
+    bitdepth: unknown
+    description: This is the config's scene reference space.
+    isdata: false
+    categories: [file-io]
+    encoding: scene-linear
+    allocation: uniform
