@@ -13,7 +13,7 @@ The last step in color management is often sending images to a display. In addit
 * Confusion over what metadata should be set to indicate a given display color space  
 * Misunderstandings over what transfer function should be used
 
-This document therefore tries to provide clarity around display color spaces with the goal of improving interoperability between systems that send, store, or receive and process pixel values in display color spaces.
+This document therefore tries to provide clarity around display color spaces with the goal of improving interoperability between systems that send, store, or receive and process pixel values in display color spaces. It attempts to define common display color spaces in a clear and unambiguous manner and provides a set of Color Interop ID strings that may be used in file formats.
 
 
 ### Technical Background Information for the Recommendation
@@ -58,10 +58,12 @@ These color spaces may contain a mixture of SDR and HDR elements. The maximum wh
 Modern display color space encodings sometimes allow colors that are outside the range of a given display, either in dynamic range or color gamut. For example, Rec.2100-PQ allows luminance values up to 10,000 nits and a color gamut that would require lasers to fully achieve. The present recommendation does not try to capture specific display capabilities for the following reasons:
 
 * The underlying standards being referenced here often do not specify these details (e.g., Rec.2100 does not specify the nit level or gamut of a given display).  
-* Figuring out how to best parameterize display capabilities is complicated and would require a lot more work. For example, should this be a fixed list, with options such as "P3D65x1000n0005" (this example is from ITU-T H Suppl. 19), or should it be something like ST-2086 which allows arbitrary floating-point values? If the latter, how should that be represented as a fixed name string? Should it include the minimum black level in addition to the max white level? Should it include a reference white in addition to maximum white?  
-* This would likely result in an overwhelmingly large list of name strings which might be confusing and difficult to use. And it would need to expand regularly as more capable hardware hits the market.  
-* In color management systems such as OCIO, details such as targeting a maximum nit level and color gamut are actually part of the view transform (AKA, tone-mapping) rather than the display color space. In other words, the conversion from intended display colorimetry to display code values, doesn't typically depend on the nit level involved (that's already been done), and at that point it's just applying a primary matrix and generic transfer function (such as PQ). These strings are intended to be used with the display color space, which may be used with a variety of view transforms.  
-* If details such as max nit level are needed, for example to populate ST-2086 metadata, color management systems such as OCIO already allow extracting this from the view transform by evaluating it directly.
+* Figuring out how to best parameterize display capabilities is complicated and would require a lot more work. For example, should this be a fixed list, with options such as "P3D65x1000n0005" (this example is from ITU-T H Suppl. 19), or should it be something like the AV1 metadata or ST-2086 which allow arbitrary floating-point values? If the latter, how should that be represented as a fixed interop ID string? Should it include the minimum black level in addition to the max white level? Should it include a reference white in addition to maximum white?  
+* This would likely result in an overwhelmingly large list of ID strings which might be confusing and difficult to use. And it would need to expand regularly as more capable hardware hits the market.  
+* In color management systems such as OCIO, details such as targeting a maximum nit level and color gamut are actually part of the view transform (i.e., the display rendering transform) rather than the display color space. In other words, the conversion from intended display colorimetry to display code values, doesn't typically depend on the nit level involved (that's already been done), and at that point it's just applying a primary matrix and generic transfer function (such as PQ). The interop ID strings are intended to signal the display color space, which may be used with a variety of view transforms.  
+* If details such as max nit level are needed, for example to populate AV1 or ST-2086 metadata, color management systems such as OCIO already allow extracting this from the view transform by evaluating it directly.
+
+This is perhaps a topic the Color Interop Forum could discuss in the future, but was deemed out of scope for the present recommendation.
 
 #### Integer Encodings
 
