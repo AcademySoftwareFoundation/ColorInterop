@@ -24,7 +24,7 @@ Modern color management (e.g. ACES, OpenColorIO) is based on the notion of Image
 
 Because the human visual system is adaptive, its response varies greatly based on such variables as absolute levels of illumination, viewing environment, and other factors. Therefore, successful image reproduction requires more than simply sending colorimetry -- other information is required. The Image State is an attempt to communicate some of this additional essential contextual information.
 
-The Color Interop Forum Recommendation [Color Space Encodings for Texture Assets and CG Rendering](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/01_TextureAssetColorSpaces/TextureAssetColorSpaces.md#summary-table--overview-of-the-recommendations) 
+The Color Interop Forum Recommendation [Color Space Encodings for Texture Assets and CG Rendering](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/01_TextureAssetColorSpaces/TextureAssetColorSpaces.md) 
 defines commonly used scene-referred color spaces. In some cases, there is both a scene-referred and corresponding display-referred version of a given encoding function.
 
 In a nutshell, the key difference between scene-referred and display-referred color spaces is that the latter have had a Display Rendering Transform (DRT) applied, whereas the former have not. (Other terms for a DRT are "tone-map" or "view transform". An ACES Output Transform is a good example of a DRT.) This process is often lossy and restricts the dynamic range and color gamut to that of a given display. Therefore knowing the image state is important in many workflows.
@@ -69,7 +69,7 @@ In computer graphics, it is customary to use unsigned-integer representations fo
 
 However, in video it is customary to leave additional headroom and footroom in the signal to enable integer-based processing, such as by spatial filters, which may generate values outside a nominal \[0,1\] range. For example, when encoding a luma signal using 10-bit integers, 0.0 is placed at 64 and 1.0 is placed at 940\. This is often called a "narrow", "legal", or "SMPTE" range signal, in contrast to "full" range for a computer graphics style signal.
 
-The accompanying OpenColorIO transforms are designed so as to expect and produce full-range signals. When a narrow-range signal is converted to full-range it is important to preserve the extended-range information (i.e., below 64 or above 940). In the provided OpenColorIO config, these would become floating-point values below 0.0 or above 1.0. In order to preserve the extended-range information, the transfer functions are extended above 1.0 by simply continuing the function. To preserve values below 0.0, the transfer functions are mirrored around the origin. In other words, if the positive transfer function response is f(x), the negative values are generated using –f(abs(x)).
+The accompanying OpenColorIO transforms are designed so as to expect and produce full-range signals. When a narrow-range signal is converted to full-range it is important to preserve the extended-range information (i.e., below 64 or above 940). In the provided OpenColorIO config, these would become floating-point values below 0.0 or above 1.0. In order to preserve the extended-range information, the transfer functions are extended above 1.0 by simply continuing the function. To preserve values below 0.0, the transfer functions are mirrored around the origin. In other words, if the positive transfer function response is `f(x)`, the negative values are generated using `–f(abs(x))`.
 
 In addition, the OpenColorIO transforms are defined on RGB signals. In video, a luma-chroma representation (often called YCbCr or YUV) is often what is encoded, so this should be converted to RGB (with the appropriate matrix for the given signal) prior to color management.
 
@@ -151,7 +151,7 @@ The following pieces of information are provided for each color space:
 | CICP | Color primaries: 1, Transfer function: 1 <br><br>Note that the transfer function table in H.273 confusingly gives the equations for the camera OETF rather than the display EOTF. (See H.273 Section 8.2 Note 1.) Unfortunately, the transfer function of "1" is interpreted in many different ways in various products. |
 | Basic | Yes |
 | Notes | The transfer function is specified in ITU-R BT.1886. That document provides parameters to model the actual display luminance based on a non-zero black. However, for the purposes of color management, it is assumed that the black level is constant among devices so that no correction is needed and Lb may be set to zero, making the transfer function a pure power function. <br><br>As described in the earlier pages of this recommendation, ITU-R BT.709 is for a camera OETF and so the transfer function it provides is not relevant for a display. This has been a source of great confusion in the industry. ITU-R BT.1886 is the more relevant transfer function for what most people loosely refer to as "Rec.709" video. |
-| References | [ITU-R BT.1886](https://www.itu.int/rec/R-REC-BT.1886) <br>[ITU-R BT.709](https://www.itu.int/rec/R-REC-BT.709) <br>[SMPTE ST 2080-1](https://pub.smpte.org/pub/st2080-1/st2080-1-2014.pdf) <br>[SMPTE ST 2080-3](https://pub.smpte.org/pub/st2080-3/st2080-3-2017.pdf) <br>[ITU-T H.273 (07/2024)](https://www.itu.int/rec/T-REC-H.273) <br>[ITU-T Series H supplement 19](https://www.itu.int/rec/T-REC-H.Sup19/en)|
+| References | [ITU-R BT.1886](https://www.itu.int/rec/R-REC-BT.1886) <br>[ITU-R BT.709](https://www.itu.int/rec/R-REC-BT.709) <br>[SMPTE ST 2080-1](https://pub.smpte.org/doc/st2080-1/) <br>[SMPTE ST 2080-3](https://pub.smpte.org/doc/st2080-3/) <br>[ITU-T H.273 (07/2024)](https://www.itu.int/rec/T-REC-H.273) <br>[ITU-T Series H supplement 19](https://www.itu.int/rec/T-REC-H.Sup19/en)|
 
 | User-facing Name | Display P3 \- Display |
 | :---- | :---- |
@@ -164,7 +164,7 @@ The following pieces of information are provided for each color space:
 | CICP | Color primaries: 12, Transfer function: 13 |
 | Basic | Yes |
 | Notes | In macOS, to obtain the specified transfer function on Apple displays, it is important to configure the Display System Settings to one of the reference presets such as HDR Video, Photography, or Internet & Web. By default, the transfer function is closer to a 2.2 power function. |
-| References | [ICC website spec](https://www.color.org/chardata/rgb/DisplayP3.xalter) <br>[Apple developer documentation](https://developer.apple.com/documentation/coregraphics/cgcolorspace/displayp3) <br>[SMPTE ST 2113:2018](https://pub.smpte.org/doc/st2113/20181210-pub/) (for the primaries) |
+| References | [ICC website spec](https://www.color.org/chardata/rgb/DisplayP3.xalter) <br>[Apple developer documentation](https://developer.apple.com/documentation/coregraphics/cgcolorspace/displayp3) <br>[SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
 | User-facing Name | Gamma 2.2 Rec.709 \- Display |
 | :---- | :---- |
@@ -203,7 +203,7 @@ The following pieces of information are provided for each color space:
 | CICP |  |
 | Basic | No |
 | Notes | Cinema projectors in grading suites are often set up to this color space. |
-| References | [SMPTE ST 2113:2018](https://pub.smpte.org/doc/st2113/20181210-pub/) (for the primaries) <br>[SMPTE RP 431-2](https://pub.smpte.org/doc/rp431-2/20110406-pub/) |
+| References | [SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) <br>[SMPTE RP 431-2](https://pub.smpte.org/doc/rp431-2/) |
 
 | User-facing Name | DCDM G2.6-XYZ-D65 \- Display |
 | :---- | :---- |
@@ -216,7 +216,7 @@ The following pieces of information are provided for each color space:
 | CICP | Color primaries: 10, Transfer function: 17 |
 | Basic | No |
 | Notes | The provided reference implementation maps the neutral axis to a D65 white point. |
-| References | [SMPTE ST 428-1](https://pub.smpte.org/doc/st428-1/20190212-pub/) <br>[SMPTE RP 431-2](https://pub.smpte.org/doc/rp431-2/20110406-pub/) <br>[SMPTE EG 432-1](https://pub.smpte.org/doc/eg432-1/20101110-pub/) <br>[SMPTE ST 431-1](https://pub.smpte.org/doc/st431-1/20060418-pub/)|
+| References | [SMPTE ST 428-1](https://pub.smpte.org/doc/st428-1/20190212-pub/) <br>[SMPTE RP 431-2](https://pub.smpte.org/doc/rp431-2/) <br>[SMPTE EG 432-1](https://pub.smpte.org/doc/eg432-1/) <br>[SMPTE ST 431-1](https://pub.smpte.org/doc/st431-1/)|
 
 #### High Dynamic Range (HDR) Displays
 
@@ -244,7 +244,7 @@ The following pieces of information are provided for each color space:
 | CICP | Color primaries: 12, Transfer function: 16 |
 | Basic | Yes |
 | Notes |  |
-| References | [ST 2084, High Dynamic Range Electro-Optical Transfer Function of Mastering Reference Displays](https://pub.smpte.org/doc/st2084/20140816-pub/) <br>[SMPTE ST 2113:2018](https://pub.smpte.org/doc/st2113/20181210-pub/) (for the primaries) |
+| References | [ST 2084, High Dynamic Range Electro-Optical Transfer Function of Mastering Reference Displays](https://pub.smpte.org/doc/st2084/) <br>[SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
 | User-facing Name | Rec.2100-PQ \- Display |
 | :---- | :---- |
@@ -283,7 +283,7 @@ The following pieces of information are provided for each color space:
 | CICP | Color primaries: 10, Transfer function: 16 |
 | Basic | No |
 | Notes |  |
-| References | [DCI High Dynamic Range D-Cinema Addendum](https://www.dcimovies.com/dci-specification?view=dcss) |
+| References | [DCI High Dynamic Range D-Cinema Addendum](https://documents.dcimovies.com/HDR-Addendum/release/1.2.1/) |
 
 #### Linear Display-referred Color Spaces
 
@@ -311,7 +311,7 @@ The following pieces of information are provided for each color space:
 | CICP | Color primaries: 12, Transfer function: 8 |
 | Basic | No |
 | Notes | This color space is typically used when compositing a graphical user-interface for presentation on wide-gamut SDR or HDR displays. |
-| References | [SMPTE ST 2113:2018](https://pub.smpte.org/doc/st2113/20181210-pub/) (for the primaries) |
+| References | [SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
 | User-facing Name | Linear Rec.2020 \- Display-referred |
 | :---- | :---- |
@@ -341,9 +341,9 @@ Charles Poynton, *Digital Video and HD Algorithms and Interfaces,* Second Editio
 
 [ACES Technical Documentation](https://docs.acescentral.com/)
 
-[SMPTE ST 2065-1:2012 – Academy Color Encoding Specification (ACES)](https://pub.smpte.org/doc/st2065-1/20200909-pub/)
+[SMPTE ST 2065-1:2012 – Academy Color Encoding Specification (ACES)](https://pub.smpte.org/doc/st2065-1/)
 
-[SMPTE RP 177-1993 – Derivation of Basic Television Color Equations](https://pub.smpte.org/doc/rp177/19931101-pub/)
+[SMPTE RP 177-1993 – Derivation of Basic Television Color Equations](https://pub.smpte.org/doc/rp177/)
 
 SMPTE ST 2094-50 – Dynamic Metadata for Color Volume Transform \- Application \#5 (Broadcast) (to be published)
 
@@ -362,9 +362,9 @@ signal type identification](https://www.itu.int/rec/T-REC-H.273)
 
 ### Annex A: OCIO Reference Config
 
-An OpenColorIO config file is provided which implements the recommended color spaces. The file is `core-displays-config.ocio`, available in the same directory as this document on GitHub.
+An OpenColorIO config file is provided which implements the recommended color spaces. The file is `core-display-config.ocio`, available in the same directory as this document on GitHub.
 
-[OCIO Reference Config](./core-displays-config.ocio)
+[OCIO Reference Config](./core-display-config.ocio)
 
 It uses CIE-XYZ (1931) as the display-referred reference space, which means the transforms for all the other color spaces convert to that space. The neutral axis is placed at a chromaticity of D65. For HDR displays, 1.0 in the connection space corresponds to an absolute luminance level of 100 nits. (This scaling makes images easier to view during development.)
 
