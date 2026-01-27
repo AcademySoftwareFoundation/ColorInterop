@@ -67,9 +67,9 @@ This is perhaps a topic the Color Interop Forum could discuss in the future, but
 
 #### Integer Encodings
 
-In computer graphics, it is customary to use unsigned-integer representations for color values. In systems such as OpenColorIO, these are normalized into a nominal 0.0 to 1.0 floating-point representation for processing by dividing by (2^N \- 1), for example, 8-bit integer values are divided by 255\. 
+In computer graphics, it is customary to use unsigned-integer representations for color values. In systems such as OpenColorIO, these are normalized into a nominal 0.0 to 1.0 floating-point representation for processing by dividing by (2^N - 1), for example, 8-bit integer values are divided by 255. 
 
-However, in video it is customary to leave additional headroom and footroom in the signal to enable integer-based processing, such as by spatial filters, which may generate values outside a nominal \[0,1\] range. For example, when encoding a luma signal using 10-bit integers, 0.0 is placed at 64 and 1.0 is placed at 940\. This is often called a "narrow", "legal", or "SMPTE" range signal, in contrast to "full" range for a computer graphics style signal.
+However, in video it is customary to leave additional headroom and footroom in the signal to enable integer-based processing, such as by spatial filters, which may generate values outside a nominal [0,1] range. For example, when encoding a luma signal using 10-bit integers, 0.0 is placed at 64 and 1.0 is placed at 940. This is often called a "narrow", "legal", or "SMPTE" range signal, in contrast to "full" range for a computer graphics style signal.
 
 The accompanying OpenColorIO transforms are designed so as to expect and produce full-range signals. When a narrow-range signal is converted to full-range it is important to preserve the extended-range information (i.e., below 64 or above 940). In the provided OpenColorIO config, these would become floating-point values below 0.0 or above 1.0. In order to preserve the extended-range information, the transfer functions are extended above 1.0 by simply continuing the function. To preserve values below 0.0, the transfer functions are mirrored around the origin. In other words, if the positive transfer function response is `f(x)`, the negative values are generated using `–f(abs(x))`.
 
@@ -93,7 +93,7 @@ The following pieces of information are provided for each color space:
 | Component | Description |
 | :---- | :---- |
 | User-facing Name | This is the full name of the color space. It is recommended as the user-facing text that should be used in software user interfaces. For example, these are the names that users would see in the color space menus of an application that uses OpenColorIO. |
-| Interop ID | This is a shorter name that is intended to be used in file formats. These are constructed so that they are also suitable for use in file paths or as arguments to command-line tools or scripts. In the context of OpenColorIO, these would appear as the interop\_id (OCIO 2.5, or higher) and in the "aliases" list but do not appear in user-facing menus. Please see this document for more detail: [An ID for Color Interop](https://docs.google.com/document/d/1T94lYbis9uCskL_ZEMxGBF2JryLfZnjxlEoNgRHZzBE/edit?usp=sharing). |
+| Interop ID | This is a shorter name that is intended to be used in file formats. These are constructed so that they are also suitable for use in file paths or as arguments to command-line tools or scripts. In the context of OpenColorIO, these would appear as the interop_id (OCIO 2.5, or higher) and in the "aliases" list but do not appear in user-facing menus. Please see this document for more detail: [An ID for Color Interop](https://docs.google.com/document/d/1T94lYbis9uCskL_ZEMxGBF2JryLfZnjxlEoNgRHZzBE/edit?usp=sharing). |
 | Transfer Function | The transfer function is the non-linearity that is applied to the RGB values relative to a linear representation. Values are described as "linear" if they are proportional to light energy from a display. For non-linear transfer functions, the description provided is for the function to convert the non-linear encoding to a linear encoding (i.e., the EOTF). |
 | Primaries | The color primaries are the CIE 1931 xy chromaticity coordinates for red, green, and blue. The linear RGB values are tristimulus values in the specified coordinates. Positive RGB values define the gamut for those primaries. Note that since the linear color spaces are expected to be represented using floating-point numbers, colors outside the gamut of the primaries may be represented using a negative value for one or more of R, G, or B. |
 | White Point | The CIE 1931 xy chromaticity coordinates that the primaries are normalized to. This defines the white point of the viewing environment that the observer is adapted to. |
@@ -111,25 +111,25 @@ The following pieces of information are provided for each color space:
 
 | User-facing Name | Interop iD | Transfer Function | Primaries | White Point | Image State |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| sRGB \- Display | `srgb_rec709_display` | sRGB | Rec.709 | D65 | Display-referred |
-| Rec.1886 Rec.709 \- Display | `g24_rec709_display` | 2.4 power | Rec.709 | D65 | Display-referred |
-| Display P3 \- Display | `srgb_p3d65_display` | sRGB | DCI-P3 | D65 | Display-referred |
-| Display P3 HDR \- Display | `srgbe_p3d65_display` | extended sRGB | DCI-P3 | D65 | Display-referred |
-| ST2084-P3-D65 \- Display | `pq_p3d65_display` | PQ | DCI-P3 | D65 | Display-referred |
-| Rec.2100-PQ \- Display | `pq_rec2020_display` | PQ | Rec.2100 | D65 | Display-referred |
-| Rec.2100-HLG \- Display | `hlg_rec2020_display` | HLG | Rec.2100 | D65 | Display-referred |
-| Gamma 2.2 Rec.709 \- Display | `g22_rec709_display` | 2.2 power | Rec.709 | D65 | Display-referred |
-| AdobeRGB \- Display | `g22_adobergb_display` | ~2.2 power | AdobeRGB | D65 | Display-referred |
-| Gamma 2.6 P3-D65 \- Display | `g26_p3d65_display` | 2.6 power | DCI-P3 | D65 | Display-referred |
-| DCDM G2.6-XYZ-D65 \- Display | `g26_xyzd65_display` | 2.6 power | XYZ | D65 | Display-referred |
-| DCDM ST2084-XYZ-D65 \- Display | `pq_xyzd65_display` | PQ | XYZ | D65 | Display-referred |
-| Linear Rec.709 \- Display-referred | `lin_rec709_display` | Linear | Rec.709 | D65 | Display-referred |
-| Linear P3-D65 \- Display-referred | `lin_p3d65_display` | Linear | DCI-P3 | D65 | Display-referred |
-| Linear Rec.2020 \- Display-referred | `lin_rec2020_display` | Linear | Rec.2020 | D65 | Display-referred |
+| sRGB - Display | `srgb_rec709_display` | sRGB | Rec.709 | D65 | Display-referred |
+| Rec.1886 Rec.709 - Display | `g24_rec709_display` | 2.4 power | Rec.709 | D65 | Display-referred |
+| Display P3 - Display | `srgb_p3d65_display` | sRGB | DCI-P3 | D65 | Display-referred |
+| Display P3 HDR - Display | `srgbe_p3d65_display` | extended sRGB | DCI-P3 | D65 | Display-referred |
+| ST2084-P3-D65 - Display | `pq_p3d65_display` | PQ | DCI-P3 | D65 | Display-referred |
+| Rec.2100-PQ - Display | `pq_rec2020_display` | PQ | Rec.2100 | D65 | Display-referred |
+| Rec.2100-HLG - Display | `hlg_rec2020_display` | HLG | Rec.2100 | D65 | Display-referred |
+| Gamma 2.2 Rec.709 - Display | `g22_rec709_display` | 2.2 power | Rec.709 | D65 | Display-referred |
+| AdobeRGB - Display | `g22_adobergb_display` | ~2.2 power | AdobeRGB | D65 | Display-referred |
+| Gamma 2.6 P3-D65 - Display | `g26_p3d65_display` | 2.6 power | DCI-P3 | D65 | Display-referred |
+| DCDM G2.6-XYZ-D65 - Display | `g26_xyzd65_display` | 2.6 power | XYZ | D65 | Display-referred |
+| DCDM ST2084-XYZ-D65 - Display | `pq_xyzd65_display` | PQ | XYZ | D65 | Display-referred |
+| Linear Rec.709 - Display-referred | `lin_rec709_display` | Linear | Rec.709 | D65 | Display-referred |
+| Linear P3-D65 - Display-referred | `lin_p3d65_display` | Linear | DCI-P3 | D65 | Display-referred |
+| Linear Rec.2020 - Display-referred | `lin_rec2020_display` | Linear | Rec.2020 | D65 | Display-referred |
 
 #### Standard Dynamic Range (SDR) Displays
 
-| User-facing Name | sRGB \- Display |
+| User-facing Name | sRGB - Display |
 | :---- | :---- |
 | Interop ID | `srgb_rec709_display` |
 | Transfer Function | sRGB (piecewise) |
@@ -142,7 +142,7 @@ The following pieces of information are provided for each color space:
 | Notes | Due to numerous problems with the IEC standard, there have been many misunderstandings about the transfer function formula. Please refer to Annex B of the Color Interop Forum ["Color Space Encodings for Texture Assets and CG Rendering"](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/01_TextureAssetColorSpaces/TextureAssetColorSpaces.md#annex-b-the-srgb-transfer-function) document for a detailed explanation. |
 | References | IEC 61966-2-1:1999 |
 
-| User-facing Name | Rec.1886 Rec.709 \- Display |
+| User-facing Name | Rec.1886 Rec.709 - Display |
 | :---- | :---- |
 | Interop ID | `g24_rec709_display` |
 | Transfer Function | Power function with exponent: 2.4  |
@@ -155,7 +155,7 @@ The following pieces of information are provided for each color space:
 | Notes | The transfer function is specified in ITU-R BT.1886. That document provides parameters to model the actual display luminance based on a non-zero black. However, for the purposes of color management, it is assumed that the black level is constant among devices so that no correction is needed and Lb may be set to zero, making the transfer function a pure power function. <br><br>As described in the earlier pages of this recommendation, ITU-R BT.709 is for a camera OETF and so the transfer function it provides is not relevant for a display. This has been a source of great confusion in the industry. ITU-R BT.1886 is the more relevant transfer function for what most people loosely refer to as "Rec.709" video. |
 | References | [ITU-R BT.1886](https://www.itu.int/rec/R-REC-BT.1886) <br>[ITU-R BT.709](https://www.itu.int/rec/R-REC-BT.709) <br>[SMPTE ST 2080-1](https://pub.smpte.org/doc/st2080-1/) <br>[SMPTE ST 2080-3](https://pub.smpte.org/doc/st2080-3/) <br>[ITU-T H.273 (07/2024)](https://www.itu.int/rec/T-REC-H.273) <br>[ITU-T Series H supplement 19](https://www.itu.int/rec/T-REC-H.Sup19/en)|
 
-| User-facing Name | Display P3 \- Display |
+| User-facing Name | Display P3 - Display |
 | :---- | :---- |
 | Interop ID | `srgb_p3d65_display` |
 | Transfer Function | sRGB (piecewise) |
@@ -168,7 +168,7 @@ The following pieces of information are provided for each color space:
 | Notes | In macOS, to obtain the specified transfer function on Apple displays, it is important to configure the Display System Settings to one of the reference presets such as HDR Video, Photography, or Internet & Web. By default, the transfer function is closer to a 2.2 power function. |
 | References | [ICC website spec](https://www.color.org/chardata/rgb/DisplayP3.xalter) <br>[Apple developer documentation](https://developer.apple.com/documentation/coregraphics/cgcolorspace/displayp3) <br>[SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
-| User-facing Name | Gamma 2.2 Rec.709 \- Display |
+| User-facing Name | Gamma 2.2 Rec.709 - Display |
 | :---- | :---- |
 | Interop ID | `g22_rec709_display` |
 | Transfer Function | Power function with exponent: 2.2 |
@@ -181,7 +181,7 @@ The following pieces of information are provided for each color space:
 | Notes | Because of the confusion around the IEC sRGB specification, some display modes labelled "sRGB" actually use a pure 2.2 power function rather than the piecewise function. Some people prefer to author for this color space rather than sRGB since the result will be lifted blacks if played back on a true sRGB display, whereas authoring to sRGB will result in crushed blacks if played back on a Gamma 2.2 display (in the belief that lifting is less objectionable than crushing). |
 | References | There is no color space encoding specification, but the primaries may be found in: [ITU-R BT.709](https://www.itu.int/rec/R-REC-BT.709) |
 
-| User-facing Name | AdobeRGB \- Display |
+| User-facing Name | AdobeRGB - Display |
 | :---- | :---- |
 | Interop ID | `g22_adobergb_display` |
 | Transfer Function | Power function with exponent: 563 / 256 (= 2.19921875) |
@@ -194,7 +194,7 @@ The following pieces of information are provided for each color space:
 | Notes |  |
 | References | https://www.adobe.com/digitalimag/adobergb.html |
 
-| User-facing Name | P3-D65 \- Display |
+| User-facing Name | Gamma 2.6 P3-D65 - Display |
 | :---- | :---- |
 | Interop ID | `g26_p3d65_display` |
 | Transfer Function | Power function with exponent: 2.6 |
@@ -207,7 +207,7 @@ The following pieces of information are provided for each color space:
 | Notes | Cinema projectors in grading suites are often set up to this color space. |
 | References | [SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) <br>[SMPTE RP 431-2](https://pub.smpte.org/doc/rp431-2/) |
 
-| User-facing Name | DCDM G2.6-XYZ-D65 \- Display |
+| User-facing Name | DCDM G2.6-XYZ-D65 - Display |
 | :---- | :---- |
 | Interop ID | `g26_xyzd65_display` |
 | Transfer Function | Power function with exponent: 2.6 and headroom scaling <br><br>The headroom scaling is a factor of 48 / 52.37, applied in linear space. This gives flexibility to achieve a range of white points at 48 nits on a DCI-calibrated projector. In the reference implementation, an output of 1.0 corresponds to 52.37 nits. |
@@ -222,7 +222,7 @@ The following pieces of information are provided for each color space:
 
 #### High Dynamic Range (HDR) Displays
 
-| User-facing Name | Display P3 HDR \- Display |
+| User-facing Name | Display P3 HDR - Display |
 | :---- | :---- |
 | Interop ID | `srgbe_p3d65_display` |
 | Transfer Function | sRGB (piecewise), extended range. <br><br>The goal of the extended range is to allow the SDR white of a software UI to be placed at 1.0 while HDR highlights in images extend above this. |
@@ -235,7 +235,7 @@ The following pieces of information are provided for each color space:
 | Notes | Please see the SDR version of this space above for more detail. |
 | References |  |
 
-| User-facing Name | ST2084-P3-D65 \- Display |
+| User-facing Name | ST2084-P3-D65 - Display |
 | :---- | :---- |
 | Interop ID | `pq_p3d65_display` |
 | Transfer Function | ST 2084 (PQ) |
@@ -248,7 +248,7 @@ The following pieces of information are provided for each color space:
 | Notes |  |
 | References | [ST 2084, High Dynamic Range Electro-Optical Transfer Function of Mastering Reference Displays](https://pub.smpte.org/doc/st2084/) <br>[SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
-| User-facing Name | Rec.2100-PQ \- Display |
+| User-facing Name | Rec.2100-PQ - Display |
 | :---- | :---- |
 | Interop ID | `pq_rec2020_display` |
 | Transfer Function | ST 2084 (PQ) |
@@ -261,7 +261,7 @@ The following pieces of information are provided for each color space:
 | Notes |  |
 | References | [ITU-R BT.2100](https://www.itu.int/rec/R-REC-BT.2100) |
 
-| User-facing Name | Rec.2100-HLG \- Display |
+| User-facing Name | Rec.2100-HLG - Display |
 | :---- | :---- |
 | Interop ID | `hlg_rec2020_display` |
 | Transfer Function | ITU-R BT.2100 (HLG) EOTF <br><br>Unlike the other color spaces here, the HLG EOTF has channel cross-talk. For authoring content, the peak white point should be set to 1000 nits, which sets the "system gamma" parameter to 1.2. |
@@ -271,10 +271,10 @@ The following pieces of information are provided for each color space:
 | Typ. Viewing Env. | Dim surround (see BT.2100) |
 | CICP | Color primaries: 9, Transfer function: 18 |
 | Basic | Yes |
-| Notes | Similar to the Rec.709 situation described above, H.273 provides the OETF rather than the EOTF in the table for transfer function 18\. For the purposes of playing back a signal on a display, the EOTF should be used, and the inverse EOTF should be used for encoding content. These are available in ITU-R BT.2100. |
+| Notes | Similar to the Rec.709 situation described above, H.273 provides the OETF rather than the EOTF in the table for transfer function 18. For the purposes of playing back a signal on a display, the EOTF should be used, and the inverse EOTF should be used for encoding content. These are available in ITU-R BT.2100. |
 | References | [ITU-R BT.2100](https://www.itu.int/rec/R-REC-BT.2100) |
 
-| User-facing Name | DCDM ST2084-XYZ-D65 \- Display |
+| User-facing Name | DCDM ST2084-XYZ-D65 - Display |
 | :---- | :---- |
 | Interop ID | `pq_xyzd65_display` |
 | Transfer Function | ST 2084 (PQ) |
@@ -289,7 +289,7 @@ The following pieces of information are provided for each color space:
 
 #### Linear Display-referred Color Spaces
 
-| User-facing Name | Linear Rec.709 \- Display-referred |
+| User-facing Name | Linear Rec.709 - Display-referred |
 | :---- | :---- |
 | Interop ID | `lin_rec709_display` |
 | Transfer Function | Linear (please refer to the section above regarding linear transfer functions) |
@@ -302,7 +302,7 @@ The following pieces of information are provided for each color space:
 | Notes | This color space is typically used when compositing a graphical user-interface for presentation on SDR or HDR displays. |
 | References | [ITU-R BT.709](https://www.itu.int/rec/R-REC-BT.709) (for the primaries) |
 
-| User-facing Name | Linear P3-D65 \- Display-referred |
+| User-facing Name | Linear P3-D65 - Display-referred |
 | :---- | :---- |
 | Interop ID | `lin_p3d65_display` |
 | Transfer Function | Linear (please refer to the section above regarding linear transfer functions) |
@@ -315,7 +315,7 @@ The following pieces of information are provided for each color space:
 | Notes | This color space is typically used when compositing a graphical user-interface for presentation on wide-gamut SDR or HDR displays. |
 | References | [SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
-| User-facing Name | Linear Rec.2020 \- Display-referred |
+| User-facing Name | Linear Rec.2020 - Display-referred |
 | :---- | :---- |
 | Interop ID | `lin_rec2020_display` |
 | Transfer Function | Linear (please refer to the section above regarding linear transfer functions) |
@@ -347,7 +347,7 @@ Charles Poynton, *Digital Video and HD Algorithms and Interfaces,* Second Editio
 
 [SMPTE RP 177-1993 – Derivation of Basic Television Color Equations](https://pub.smpte.org/doc/rp177/)
 
-SMPTE ST 2094-50 – Dynamic Metadata for Color Volume Transform \- Application \#5 (Broadcast) (to be published)
+SMPTE ST 2094-50 – Dynamic Metadata for Color Volume Transform - Application #5 (Broadcast) (to be published)
 
 [OpenColorIO](https://opencolorio.org/)
 
