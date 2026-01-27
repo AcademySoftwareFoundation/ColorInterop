@@ -175,7 +175,7 @@ The following pieces of information are provided for each color space:
 | Primaries | Rec.709 – R {x: 0.640, y: 0.330}, G {x: 0.300, y: 0.600}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
 | Image State | Display-referred |
-| Typ. Viewing Env. | General computer usage |
+| Typ. Viewing Env. | No normative definition, expectation is for general computer usage. |
 | CICP | Color primaries: 1, Transfer function: 4 |
 | Basic | No |
 | Notes | Because of the confusion around the IEC sRGB specification, some display modes labelled "sRGB" actually use a pure 2.2 power function rather than the piecewise function. Some people prefer to author for this color space rather than sRGB since the result will be lifted blacks if played back on a true sRGB display, whereas authoring to sRGB will result in crushed blacks if played back on a Gamma 2.2 display (in the belief that lifting is less objectionable than crushing). |
@@ -188,7 +188,7 @@ The following pieces of information are provided for each color space:
 | Primaries | AdobeRGB – R {x: 0.640, y: 0.330}, G {x: 0.210, y: 0.710}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
 | Image State | Display-referred |
-| Typ. Viewing Env. | General computer usage |
+| Typ. Viewing Env. | No normative definition, expectation is for general computer usage. |
 | CICP |  |
 | Basic | No |
 | Notes |  |
@@ -296,7 +296,7 @@ The following pieces of information are provided for each color space:
 | Primaries | Rec.709 – R {x: 0.640, y: 0.330}, G {x: 0.300, y: 0.600}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
 | Image State | Display-referred |
-| Typ. Viewing Env. | General computer usage |
+| Typ. Viewing Env. | No normative definition, expectation is for general computer usage. |
 | CICP | Color primaries: 1, Transfer function: 8 |
 | Basic | No |
 | Notes | This color space is typically used when compositing a graphical user-interface for presentation on SDR or HDR displays. |
@@ -309,7 +309,7 @@ The following pieces of information are provided for each color space:
 | Primaries | DCI-P3 – R {x: 0.680, y: 0.320}, G {x: 0.265, y: 0.690}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
 | Image State | Display-referred |
-| Typ. Viewing Env. | General computer usage |
+| Typ. Viewing Env. | No normative definition, expectation is for general computer usage. |
 | CICP | Color primaries: 12, Transfer function: 8 |
 | Basic | No |
 | Notes | This color space is typically used when compositing a graphical user-interface for presentation on wide-gamut SDR or HDR displays. |
@@ -322,7 +322,7 @@ The following pieces of information are provided for each color space:
 | Primaries | Rec.2020 – R {x: 0.708, y: 0.292}, G {x: 0.170, y: 0.797}, B {x: 0.131, y: 0.046} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
 | Image State | Display-referred |
-| Typ. Viewing Env. | General computer usage |
+| Typ. Viewing Env. | No normative definition, expectation is for general computer usage. |
 | CICP | Color primaries: 9, Transfer function: 8 |
 | Basic | No |
 | Notes | This color space is typically used when compositing a graphical user-interface for presentation on wide-gamut SDR or HDR displays. |
@@ -370,7 +370,9 @@ An OpenColorIO config file is provided which implements the recommended color sp
 
 It uses CIE-XYZ (1931) as the display-referred reference space, which means the transforms for all the other color spaces convert to that space. The neutral axis is placed at a chromaticity of D65. For HDR displays, 1.0 in the connection space corresponds to an absolute luminance level of 100 nits. (This scaling makes images easier to view during development.)
 
-OCIO configs also require a scene-referred reference space and so ACES2065-1 serves that purpose in this config.
+OCIO displays, views, and some scene-referred color space examples are included along with the display color spaces to provide a better illustration of how they fit within a more complete color managed workflow. 
+
+OCIO's built-in ACES 1.1 view transforms are used as the example display rendering transforms to convert from scene-referred to display-referred values. These are well-known example DRTs, but in practice, other DRTs may be used. For converting from one display-referred color space to another, a "Video (colorimetric)" view transform is included, which is simply a no-op.
 
 OpenColorIO provides a maximum of single-precision (32-bit float) pixel processing. However, the matrix coefficients and other parameters in the config file are calculated at double-precision and so may be used as a reference source for higher precision processing.
 
