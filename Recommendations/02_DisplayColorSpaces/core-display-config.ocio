@@ -7,8 +7,8 @@ strictparsing: true
 luma: [0.2126, 0.7152, 0.0722]
 name: core-display-config-v1.0.0
 description: |
-  Color Space Encodings for Displays
-  ASWF Color Interop Forum Recommendation 2026-01
+  Color Space Encodings for Displays reference config
+  ASWF Color Interop Forum Recommendation version: 1.0.0
 
 roles:
   aces_interchange: ACES2065-1
@@ -51,7 +51,7 @@ displays:
     - !<Views> [ACES 1.0 - SDR Video, Video (colorimetric)]
   AdobeRGB - Display:
     - !<Views> [ACES 1.0 - SDR Video, Video (colorimetric)]
-  P3-D65 - Display:
+  Gamma 2.6 P3-D65 - Display:
     - !<Views> [ACES 1.0 - SDR Cinema, Video (colorimetric)]
   DCDM G2.6-XYZ-D65 - Display:
     - !<Views> [ACES 1.0 - SDR Cinema, Video (colorimetric)]
@@ -65,7 +65,7 @@ displays:
   Linear Rec.2020 - Display-referred:
     - !<Views> ["ACES 1.1 - HDR Video (1000 nits & Rec.2020 lim)", Video (colorimetric)]
 
-active_displays: [sRGB - Display, Rec.1886 Rec.709 - Display, Display P3 - Display, Display P3 HDR - Display, ST2084-P3-D65 - Display, Rec.2100-PQ - Display, Rec.2100-HLG - Display, Gamma 2.2 Rec.709 - Display, AdobeRGB - Display, P3-D65 - Display, DCDM G2.6-XYZ-D65 - Display, DCDM ST2084-XYZ-D65 - Display]
+active_displays: [sRGB - Display, Rec.1886 Rec.709 - Display, Display P3 - Display, Display P3 HDR - Display, ST2084-P3-D65 - Display, Rec.2100-PQ - Display, Rec.2100-HLG - Display, Gamma 2.2 Rec.709 - Display, AdobeRGB - Display, Gamma 2.6 P3-D65 - Display, DCDM G2.6-XYZ-D65 - Display, DCDM ST2084-XYZ-D65 - Display]
 active_views: [ACES 1.0 - SDR Video, "ACES 1.1 - HDR Video (1000 nits & Rec.2020 lim)", ACES 1.0 - SDR Cinema, "ACES 1.1 - HDR Cinema (108 nits & P3 lim)", Video (colorimetric)]
 inactive_colorspaces: [CIE XYZ-D65 - Display-referred]
 
@@ -192,8 +192,8 @@ display_colorspaces:
         - !<ExponentTransform> {value: 2.19921875, style: mirror, direction: inverse}
 
   - !<ColorSpace>
-    name: P3-D65 - Display
-    aliases: [g26_p3d65_display]
+    name: Gamma 2.6 P3-D65 - Display
+    aliases: [g26_p3d65_display, P3-D65 - Display]
     interop_id: g26_p3d65_display
     encoding: sdr-video
     from_display_reference: !<GroupTransform>
