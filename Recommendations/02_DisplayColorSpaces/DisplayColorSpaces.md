@@ -29,17 +29,17 @@ defines commonly used scene-referred color spaces. In some cases, there is both 
 
 In a nutshell, the key difference between scene-referred and display-referred color spaces is that the latter have had a Display Rendering Transform (DRT) applied, whereas the former have not. (Other terms for a DRT are "tone-map" or "view transform". An ACES Output Transform is a good example of a DRT.) This process is often lossy and restricts the dynamic range and color gamut to that of a given display. Therefore knowing the image state is important in many workflows.
 
-Because all of the color spaces in this recommendation have already received the processing necessary to make them ready for presentation on a display, they are considered display-referred.
+Because all of the color spaces in this recommendation have already received the DRT processing necessary to make them ready for presentation on a display, they are considered display-referred.
 
 #### Transfer Functions
 
-Display color space encodings are generally designed for use with integer-based numeric representations (for example, an eight-bit number between 0 and 255). Since linear color space encodings require floating-point representations, display color space encodings typically have some kind of non-linear transfer function associated with them that makes them more perceptually uniform and thus able to be represented successfully with integers.
+Display color space encodings are generally designed for use with integer-based numeric representations (for example, an eight-bit number between 0 and 255) that may be sent to display hardware. They typically have some kind of non-linear transfer function associated with them that makes them more perceptually uniform and thus better suited for integer representations.
 
 In video, it is common to use the term Opto-Electronic Transfer Function (OETF) to describe what a camera should do to encode the signal for efficient storage or transmission and the term Electro-Optical Transfer Function (EOTF) to describe what the display does to get back to linear light. 
 
 These are not always inverses of each other. For example, in HD video, ITU-R BT.709 (Rec.709) is a specification for the OETF (i.e., a camera), and ITU-R BT.1886 (Rec.1886) is a specification for an EOTF (i.e., a display). The net difference between the two is described using the term Opto-Optical Transfer Function (OOTF) and the basic explanation for why this is necessary is to account for the difference in how the human visual system responds to the capture conditions vs. the display conditions.
 
-The present recommendation concerns itself only with the display side and not the camera side. Thus, it is only concerned with the EOTF, that is, the response of the display. It is not concerned with the OETF, that is, the response of the camera. This simplifies matters greatly for several reasons: real cameras don't always follow standard OETF functions and the encoding is generally followed by a color correction step which makes the overall OOTF unknown.
+The present recommendation concerns itself only with the display side and not the camera side. Thus, it is only concerned with the EOTF, that is, the response of the display. It is not concerned with the OETF, that is, the response of the camera. This simplifies matters greatly for several reasons: real cameras don't always adhere to standard OETF functions and the encoding is generally followed by a color correction step which makes the overall OOTF unknown.
 
 Thus, for the purposes of this document, the encode (inverse EOTF) and decode (EOTF) steps are always exactly symmetric inverses of each other. What the OETF and OOTF or color correction steps were does not really matter, the only problem is how to present the intended colors on a given display.
 
@@ -47,15 +47,15 @@ One more note on terminology: The non-linear transfer function often takes the f
 
 #### Linear Transfer Functions
 
-Several color space encodings defined below contain linear transfer functions. These are intended to be used as working spaces for operations such as compositing multiple display-referred elements together as part of a graphical user interface or a window within a computer display. Typically they will then be converted to one of the non-linear color space encodings defined herein before being sent to an actual monitor or display. However, it is important to realize that these are display-referred color spaces that have already had the scene-to-display tone-mapping applied.
+Several color space encodings defined below contain linear transfer functions. These are intended to be used as working spaces for operations such as compositing multiple display-referred elements together as part of a graphical user interface or a window within a computer display. Typically they will then be converted to one of the non-linear color space encodings defined herein before being sent to an actual monitor or display. However, it is important to realize that these are display-referred color spaces that have already had the scene-to-display tone-mapping (i.e., the DRT) applied.
 
-The linear color space encodings are not suitable for integer usage, a floating-point representation must be used. Values may extend below 0.0 to represent values outside the gamut of the primaries.
+The linear color space encodings are not suitable for integer usage, a floating-point representation should be used. Values may extend below 0.0 to represent values outside the gamut of the primaries.
 
 These color spaces may contain a mixture of SDR and HDR elements. The maximum white of an SDR user interface element would be placed at 1.0. If HDR content is present, values may extend above 1.0. The value of 1.0 serves as a normalization anchor when adjusting image values to accommodate varying amounts of HDR headroom (e.g., as described in SMPTE ST 2094-50).
 
 #### Signaling of Display Capabilities
 
-Modern display color space encodings sometimes allow colors that are outside the range of a given display, either in dynamic range or color gamut. For example, Rec.2100-PQ allows luminance values up to 10,000 nits and a color gamut that would require lasers to fully achieve. The present recommendation does not try to capture specific display capabilities for the following reasons:
+Modern display color space encodings sometimes allow colors that are outside the range of a given display, either in dynamic range or color gamut. For example, Rec.2100-PQ allows luminance values up to 10,000 nits and a color gamut that would require lasers to fully achieve. The present recommendation does not try to capture specific display capabilities for the following reasons and open questions:
 
 * The underlying standards being referenced here often do not specify these details (e.g., Rec.2100 does not specify the nit level or gamut of a given display).  
 * Figuring out how to best parameterize display capabilities is complicated and would require a lot more work. For example, should this be a fixed list, with options such as "P3D65x1000n0005" (this example is from ITU-T H Suppl. 19), or should it be something like the AV1 metadata or ST-2086 which allow arbitrary floating-point values? If the latter, how should that be represented as a fixed interop ID string? Should it include the minimum black level in addition to the max white level? Should it include a reference white in addition to maximum white?  
@@ -93,12 +93,12 @@ The following pieces of information are provided for each color space:
 | Component | Description |
 | :---- | :---- |
 | User-facing Name | This is the full name of the color space. It is recommended as the user-facing text that should be used in software user interfaces. For example, these are the names that users would see in the color space menus of an application that uses OpenColorIO. |
-| Interop ID | This is a shorter name that is intended to be used in file formats. These are constructed so that they are also suitable for use in file paths or as arguments to command-line tools or scripts. In the context of OpenColorIO, these would appear as the interop_id (OCIO 2.5, or higher) and in the "aliases" list but do not appear in user-facing menus. Please see this document for more detail: [An ID for Color Interop](https://docs.google.com/document/d/1T94lYbis9uCskL_ZEMxGBF2JryLfZnjxlEoNgRHZzBE/edit?usp=sharing). |
+| Interop ID | This is a shorter name that is intended to be used in file formats. These are constructed so that they are also suitable for use in file paths or as arguments to command-line tools or scripts. In the context of OpenColorIO, these would appear as the `interop_id` (OCIO 2.5, or higher) and in the "aliases" list but do not appear in user-facing menus. Please see this document for more detail: [An ID for Color Interop](https://docs.google.com/document/d/1T94lYbis9uCskL_ZEMxGBF2JryLfZnjxlEoNgRHZzBE/edit?usp=sharing). |
 | Transfer Function | The transfer function is the non-linearity that is applied to the RGB values relative to a linear representation. Values are described as "linear" if they are proportional to light energy from a display. For non-linear transfer functions, the description provided is for the function to convert the non-linear encoding to a linear encoding (i.e., the EOTF). |
 | Primaries | The color primaries are the CIE 1931 xy chromaticity coordinates for red, green, and blue. The linear RGB values are tristimulus values in the specified coordinates. Positive RGB values define the gamut for those primaries. Note that since the linear color spaces are expected to be represented using floating-point numbers, colors outside the gamut of the primaries may be represented using a negative value for one or more of R, G, or B. |
 | White Point | The CIE 1931 xy chromaticity coordinates that the primaries are normalized to. This defines the white point of the viewing environment that the observer is adapted to. |
 | Image State | The image state of the color space encoding, as defined in ISO 22028-1. |
-| Typical Viewing Environment | Guidance about the viewing environment and display peak white point, especially related to differences between nominal standards and how signals are typically used in practice. |
+| Typical Viewing Environment | Guidance about the viewing environment and display peak white point, especially as related to differences between nominal standards and how signals are typically used in practice. |
 | CICP values | ITU-T H.273 [Coding-independent code points for video signal type identification](https://www.itu.int/rec/T-REC-H.273) is widely used in file formats to describe display color spaces. H.273 defines a number of "code points" but only two are relevant here: color primaries and transfer function. |
 | Basic | While this document recommends that implementers support all of the color spaces documented here, it is recognized that the full list may be overwhelming to some users who may struggle with which option to choose. Therefore, a few color spaces are singled out as being especially essential for novice users. This shorter core list may, for example, be used if an application wants to present a shorter list of menu options when creating new assets. |
 | Notes | Historically, there has been confusion around the implementation of several of these color spaces. This document tries to provide some additional notes and background information which implementers may find useful. |
@@ -114,7 +114,7 @@ The following pieces of information are provided for each color space:
 | sRGB - Display | `srgb_rec709_display` | sRGB | Rec.709 | D65 | Display-referred |
 | Rec.1886 Rec.709 - Display | `g24_rec709_display` | 2.4 power | Rec.709 | D65 | Display-referred |
 | Display P3 - Display | `srgb_p3d65_display` | sRGB | DCI-P3 | D65 | Display-referred |
-| Display P3 HDR - Display | `srgbe_p3d65_display` | extended sRGB | DCI-P3 | D65 | Display-referred |
+| Display P3 HDR - Display | `srgbe_p3d65_display` | Extended sRGB | DCI-P3 | D65 | Display-referred |
 | ST2084-P3-D65 - Display | `pq_p3d65_display` | PQ | DCI-P3 | D65 | Display-referred |
 | Rec.2100-PQ - Display | `pq_rec2020_display` | PQ | Rec.2100 | D65 | Display-referred |
 | Rec.2100-HLG - Display | `hlg_rec2020_display` | HLG | Rec.2100 | D65 | Display-referred |
@@ -165,7 +165,7 @@ The following pieces of information are provided for each color space:
 | Typ. Viewing Env. | The documentation on the ICC site specifies the following: Viewing surround: 4.1 nits, Image background (proximal field): 16 nits, Ambient illuminance: 64 lux. |
 | CICP | Color primaries: 12, Transfer function: 13 |
 | Basic | Yes |
-| Notes | In macOS, to obtain the specified transfer function on Apple displays, it is important to configure the Display System Settings to one of the reference presets such as HDR Video, Photography, or Internet & Web. By default, the transfer function is closer to a 2.2 power function. |
+| Notes | In macOS, to obtain the specified transfer function on Apple displays, it is important to configure the Display System Settings to one of the reference presets such as HDR Video, Photography, or Internet & Web that are intended for content creation. In the general purpose default preset, the transfer function is closer to a 2.2 power function. |
 | References | [ICC website spec](https://www.color.org/chardata/rgb/DisplayP3.xalter) <br>[Apple developer documentation](https://developer.apple.com/documentation/coregraphics/cgcolorspace/displayp3) <br>[SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
 | User-facing Name | Gamma 2.2 Rec.709 - Display |
@@ -178,7 +178,7 @@ The following pieces of information are provided for each color space:
 | Typ. Viewing Env. | No normative definition, expectation is for general computer usage. |
 | CICP | Color primaries: 1, Transfer function: 4 |
 | Basic | No |
-| Notes | Because of the confusion around the IEC sRGB specification, some display modes labelled "sRGB" actually use a pure 2.2 power function rather than the piecewise function. Some people prefer to author for this color space rather than sRGB since the result will be lifted blacks if played back on a true sRGB display, whereas authoring to sRGB will result in crushed blacks if played back on a Gamma 2.2 display (in the belief that lifting is less objectionable than crushing). |
+| Notes | Because of the confusion around the IEC sRGB specification, some display modes labelled "sRGB" actually use a pure 2.2 power function rather than the piecewise function. These should not be considered equivalent since there are noticeable differences in shadow reproduction. However, some creators prefer to author for this color space rather than sRGB since the result will be lifted blacks if played back on a true sRGB display, whereas authoring to sRGB will result in crushed blacks if played back on a Gamma 2.2 display (in the belief that lifting is less objectionable than crushing). |
 | References | There is no color space encoding specification, but the primaries may be found in: [ITU-R BT.709](https://www.itu.int/rec/R-REC-BT.709) |
 
 | User-facing Name | AdobeRGB - Display |
