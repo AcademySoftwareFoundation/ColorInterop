@@ -165,7 +165,7 @@ The following pieces of information are provided for each color space:
 | Typ. Viewing Env. | The documentation on the ICC site specifies the following: Viewing surround: 4.1 nits, Image background (proximal field): 16 nits, Ambient illuminance: 64 lux. |
 | CICP | Color primaries: 12, Transfer function: 13 |
 | Basic | Yes |
-| Notes | In macOS, to obtain the specified transfer function on Apple displays, it is important to configure the Display System Settings to one of the reference presets such as HDR Video, Photography, or Internet & Web that are intended for content creation. In the general purpose default preset, the transfer function may be closer to a 2.2 power function. |
+| Notes | In macOS, to obtain the specified sRGB transfer function on Apple displays, it is important to configure the Display System Settings to one of the reference presets such as HDR Video, Photography, or Internet & Web that are intended for content creation. In the general purpose default preset, the transfer function may be closer to a 2.2 power function. |
 | References | [ICC website spec](https://www.color.org/chardata/rgb/DisplayP3.xalter) <br>[Apple developer documentation](https://developer.apple.com/documentation/coregraphics/cgcolorspace/displayp3) <br>[SMPTE ST 2113](https://pub.smpte.org/doc/st2113/) (for the primaries) |
 
 | User-facing Name | Gamma 2.2 Rec.709 - Display |
