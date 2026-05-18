@@ -96,15 +96,19 @@ Application developers are urged to follow these steps when reading an OpenEXR f
 
 1. If the `acesImageContainer` attribute is present, this takes precedence, consider the color space ACES2065-1. This should be handled the same as if the `colorInteropID` is present and set to "lin\_ap0\_scene".  
 2. If the `colorInteropID` is "data", the file only contains non-color data and should not be color managed.  
-3. If the `colorInteropID` is set to "unknown" or is not present, the application may use other mechanisms to assign a default color space. (OpenColorIO provides "File Rules" for this purpose.)  
+3. If the `colorInteropID` is set to "unknown" or is not present, the application may use its preferred mechanism to assign a default color space. 
 4. Otherwise, attempt to use the `colorInteropID` with the color management system being used. Please see the [Color Interop ID recommendation](https://docs.google.com/document/d/1T94lYbis9uCskL_ZEMxGBF2JryLfZnjxlEoNgRHZzBE/edit?usp=sharing) for details on how to use the ID with OpenColorIO  
 5. If a usable color space cannot be identified from the `colorInteropID` (e.g., it is not recognized by the user's OCIO config), then the application may fall back to some other mechanism of assigning a default, or ask the user to resolve the situation.
+
+It is worth noting that the "data" and "unknown" strings specified in steps two and three are special cases whose handling may vary between applications or color management systems. In the case of OCIO, for example, a config may contain a color space (or role) with either of those names. An application may decide to simply use that, if it exists, or take some other action. For example, in the case of "data", an application might use another color space where isData is true, or it might not invoke OCIO at all. In the case of "unknown", an application might invoke OCIO's File Rules to assign a default color space based on the path name of the file.
 
 Because the chromaticities attribute is often unreliable, applications will need to judge whether to use this as a potential fallback. For example, if the `colorInteropID` is missing but the chromaticities attribute is present.
 
 Note that in some scenarios the color space may be specified by some other mechanism that has higher priority in a given pipeline. For example, if an OpenEXR file is loaded as a texture from an OpenUSD or MaterialX file, the color space attribute specified there normally takes precedence over metadata in the OpenEXR header. Similarly, an ACES Metadata File (AMF) that accompanies a directory of OpenEXR files normally takes precedence. In other cases, a color space name may be embedded in the file name or path. 
 
 Finally, it's important that applications give the artist/user the ability to override the color space to deal with incorrectly tagged files.
+
+Figure 2 provides a flow chart for assigning a color space based on the header. Please note that in a multi-part file, each part has its own header, which should be considered separately. Furthermore, if the channel name does not end in ".R", ".G", or ".B", it is not part of a color image and should be handled as data.
 
 ##### Figure 2: Recommended steps for reading OpenEXR files.
 
