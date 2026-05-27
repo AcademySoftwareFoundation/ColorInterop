@@ -2,7 +2,7 @@
 
 **ASWF Color Interop Forum Recommendation**
 
-*2026-05-24 draft – WORK-IN-PROGRESS*
+*2026-05-26 draft – WORK-IN-PROGRESS*
 
 
 ## Introduction
@@ -41,11 +41,13 @@ Images in OpenEXR files typically contain multiple channels and each channel has
 
 Unfortunately, sometimes non-color channels (e.g., normals or IDs) are labelled with an "R", "G", or "B" suffix in order to work around limitations in application software that cannot properly handle data channels. This is problematic since it means that applications that are properly color managed may need to provide some UI to allow users to disable color management on what are incorrectly labelled as RGB images.
 
-In OpenEXR terminology, a file may contain multiple "layers" where each layer is a multi-channel image. For example, a renderer might emit a file that includes a "beauty" layer of the overall render along with layers for multiple lighting passes that are useful during compositing. All RGB image layers in a file should be in the same color space. An OpenEXR file may also contain multiple "views", for example, left and right images for stereo-3D. All views in a file should be in the same color space.
+In OpenEXR terminology, a file may contain multiple "layers" where each layer is a multi-channel image. For example, a renderer might emit a file that includes a "beauty" layer of the overall render along with layers for multiple lighting passes that are useful during compositing. Similarly, it may also contain multiple "views", for example, left and right images for stereo-3D. 
 
-The contents of an OpenEXR file may be split into multiple "parts". This is typically done for performance reasons so that each part may be compressed differently or stored in a more optimal memory layout for rapid access. [Each part has its own header](https://openexr.com/en/latest/OpenEXRFileLayout.html#multi-part-file-new-in-2-0) but, by convention, the first part's metadata refers to the entire file, and other parts' metadata applies only to that part. It is recommended that color images in all parts in a single file be in the same color space. Therefore, the `colorInteropID` need only be set in the first header.
+Furthermore, the contents of an OpenEXR file may be split into multiple "parts". This is typically done for performance reasons so that each part may be compressed differently or stored in a more optimal memory layout for rapid access. [Each part has its own header](https://openexr.com/en/latest/OpenEXRFileLayout.html#multi-part-file-new-in-2-0) but, by convention, the first part's metadata refers to the entire file, and other parts' metadata applies only to that part.
 
-However, if an "R", "G", or "B" suffix must be used to define a layer that is not a color image (e.g., normals or IDs), it is recommended that those layers be put in a separate part of the OpenEXR file where the `colorInteropID` in its header is set to "data".
+It is strongly recommended that color images in all parts in a single file be in the same color space. Therefore, the `colorInteropID` need only be set in the first header.
+
+Within a part, all RGB image layers and views are considered to be in the same color space, as defined by the interop ID. If an "R", "G", or "B" suffix must be used to define a layer that is not a color image (e.g., normals or IDs), it is recommended that those layers be put in a separate part of the OpenEXR file where the `colorInteropID` in its header is set to "data".
 
 The header of an OpenEXR file may contain a [preview image](https://openexr.com/en/latest/ReadingAndWritingImageFiles.html#preview-images) (i.e., a thumbnail). These are low resolution eight-bit, gamma-corrected images stored entirely in the header. The color space of these images is unspecified but typically it will be different from the color specified by the color interop ID.
 
