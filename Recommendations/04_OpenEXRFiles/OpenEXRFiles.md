@@ -2,7 +2,7 @@
 
 **ASWF Color Interop Forum Recommendation**
 
-*2026-05-26 draft – WORK-IN-PROGRESS*
+*2026-06-01 draft – WORK-IN-PROGRESS*
 
 
 ## Introduction
@@ -55,7 +55,7 @@ The header of an OpenEXR file may contain a [preview image](https://openexr.com/
 
 Application developers are urged to follow these steps when writing an OpenEXR file in order to ensure reliable color space metadata:
 
-1. If the color space of an image is not known, do not "guess" or use a default color space such as "lin\_rec709\_scene". Either omit the `colorInteropID`, or set it to "unknown".  
+1. If the color space of an image is not known, do not "guess" or use a default color space such as "lin_rec709_scene". Either omit the `colorInteropID`, or set it to "unknown".  
 2. When copying the header metadata from a source image, do not simply forward the `colorInteropID` unless it is known that the processing did not change the color space. Similarly, do not forward other known color metadata such as `acesImageContainer` and the chromaticities if they are no longer valid.  
 3. If there are no RGB images that should be color managed, set the `colorInteropID` to "data".  
 4. If the color space is ACES2065-1 and the intent is to write a SMPTE ST 2065-4 compliant file, the `colorInteropID` "lin\_ap0\_scene" should be set in addition to the metadata specified in ST 2065-4.  
@@ -79,9 +79,9 @@ G--False-->B
 B--True-->C{Is color space known?}
 B--False-->D["`Set InteropID to _data_`"]
 C--True-->E{Is InteropID known?}
-C--False-->F["`Set InteropID to _unknown_`"]
+C--False-->F["`Don't write InteropID or\n set InteropID to _unknown_`"]
 E--True-->K{Is destination\n SMPTE ST 2065-4?}
-E--False-->H{Resolve color space\n to InteropID}
+E--False-->H{Found InteropID\n for color space?}
 H--True-->K
 H--False-->I{Able to generate\n name-spaced InteropID?}
 I--True-->K
@@ -101,12 +101,11 @@ style InvisibleNode fill:none,stroke:none,color:#00000000
 Application developers are urged to follow these steps when reading an OpenEXR file in order to ensure reliable color management:
 
 1. If the `acesImageContainer` attribute is present, this takes precedence, consider the color space ACES2065-1. This should be handled the same as if the `colorInteropID` is present and set to "lin_ap0_scene".  
-2. If the `colorInteropID` is "data", the images should not be color managed. If the interop ID was in the header for the first part of a multi-part file, it applies to the whole file. Otherwise, it applies only to the images in that part.
-3. If the `colorInteropID` is set to "unknown" or is not present, the application may use its preferred mechanism to assign a default color space. 
-4. Otherwise, attempt to use the `colorInteropID` with the color management system being used. Please see the [Color Interop ID recommendation](https://docs.google.com/document/d/1T94lYbis9uCskL_ZEMxGBF2JryLfZnjxlEoNgRHZzBE/edit?usp=sharing) for details on how to use the ID with OpenColorIO  
-5. If a usable color space cannot be identified from the `colorInteropID` (e.g., it is not recognized by the user's OCIO config), then the application may fall back to some other mechanism of assigning a default, or ask the user to resolve the situation.
+2. If the `colorInteropID` is "data", the images should not be color managed. (With OCIO, this may be accomplished by assigning the "data" role or color space, if present, or another color space where isData is true.) If the interop ID was in the header for the first part of a multi-part file, "data" applies to the whole file. Otherwise, it applies only to the images in that part.
+3. Attempt to map the `colorInteropID` to a color space supported by the color management system being used. Please see the [Color Interop ID recommendation](https://docs.google.com/document/d/1T94lYbis9uCskL_ZEMxGBF2JryLfZnjxlEoNgRHZzBE/edit?usp=sharing) for details on how to use the ID with a color management system.  
+4. If the `colorInteropID` is not present, or a usable color space cannot be identified from it (e.g., it is not recognized by the user's OCIO config), then the application may fall back to some other mechanism of assigning a color space, or ask the user to choose a color space for the image.
 
-It is worth noting that the "data" and "unknown" strings specified in steps two and three are special cases whose handling may vary between applications or color management systems. In the case of OCIO, for example, a config may contain a color space (or role) with either of those names. An application may decide to simply use that, if it exists, or take some other action. For example, in the case of "data", an application might use another color space where isData is true, or it might not invoke OCIO at all. In the case of "unknown", an application might invoke OCIO's File Rules to assign a default color space based on the path name of the file or ask the user to choose a color space.
+In step three, if the color management system was unable to find a color space for the interop ID, that is an error condition that should ideally be surfaced to the end-user. However, the ID "unknown" is a special case that need not be considered an error, an application could proceed directly with its fallback (e.g., with OCIO, the File Rules could be used to assign a color space based on the path name of the file).
 
 In a multi-part file, the `colorInteropID` in the first part should describe the color space of all RGB images in the file. The only case where another part should define the `colorInteropID` is for a part where all the layers are data. Applications are not required to support the case where the `colorInteropID` in the header for a later part is not "data".
 
@@ -128,15 +127,13 @@ B--True -->C["`Set InteropID to _lin_ap0_scene_`"]
 C-->J
 B--False -->D{Is InteropID present?}
 D--True -->E{"`Is InteropID _data_?`"}
+E--False -->J{Found color space\nfor InteropID?}
 E--True -->F[Don't color manage]
-E--False -->G{"`Is InteropID _unknown_?`"}
-G--False -->J{Resolve InteropID\nto color space}
+J--False -->K
 D--False -->K{Able to infer color\n space from context?}
-G--True -->K
-K--False -->M[Ask user to resolve]
-K--True -->L[Use color space]
-J--True-->N[Use color space]
-J--False-->O[App-specific behavior]
+K--False -->H[Ask user to resolve]
+J--True -->I
+K--True -->I[Use color space]
 InvisibleNode[.....................................................................................................................................................................]
 style InvisibleNode fill:none,stroke:none,color:#00000000
 ```
