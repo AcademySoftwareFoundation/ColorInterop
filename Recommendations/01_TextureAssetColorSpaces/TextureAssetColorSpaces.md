@@ -308,6 +308,31 @@ The following pieces of information are provided for each color space:
 | References |  |
 
 
+## General References
+
+Color Interop Forum Recommendation ["Color Space Encodings for Displays"](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/02_DisplayColorSpaces/DisplayColorSpaces.md)
+
+Color Interop Forum: [An ID for Color Interop](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/03_ColorInteropID/ColorInteropID.md)
+
+ISO 22028-1:2016 Photography and graphic technology — Extended colour encodings for digital image storage, manipulation and interchange, Part 1: Architecture and requirements  
+https://www.iso.org/standard/68761.html
+
+Colour Science Precis for the CGI Artist  
+https://colour-science.github.io/colour-science-precis/
+
+E. J. Giorgianni and T. E. Madden, Digital Color Management: Encoding Solutions, Second Edition. Addison-Wesley Longman Publishing Co., Inc., 2008, ISBN: 978-0-470-51244-9
+
+ACES Technical Documentation  
+https://docs.acescentral.com/
+
+“SMPTE ST 2065-1:2012 – Academy Color Encoding Specification (ACES),” Society of Motion Picture and Television Engineers, New York, US, Standard, 2012
+
+“SMPTE RP 177-1993 – Derivation of Basic Television Color Equations,” Society of Motion Picture and Television Engineers, New York, US, Recommended Procedure, 1993 Beverly Hills, CA, Academy Procedure, Mar. 2016
+
+OpenColorIO  
+https://opencolorio.org/  
+
+
 ## Annexes
 
 ### Annex A: How Image State is used in a Color Management System
@@ -387,30 +412,3 @@ More detail about OCIO config files is available from the opencolorio.org websit
 | :---- | :---- | :---- |
 |2024-10-07 | 1.0.0 | Initial release |
 |2026-07-14 | 1.1.0 | Add `g24_rec709_scene`. Harmonize terminology with other recommendations. |
-
-
-## General References
-
-Color Interop Forum Recommendation ["Color Space Encodings for Displays"](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/02_DisplayColorSpaces/DisplayColorSpaces.md)
-
-Color Interop Forum: [An ID for Color Interop](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/03_ColorInteropID/ColorInteropID.md)
-
-ISO 22028-1:2016 Photography and graphic technology — Extended colour encodings for digital image storage, manipulation and interchange, Part 1: Architecture and requirements  
-https://www.iso.org/standard/68761.html
-
-Colour Science Precis for the CGI Artist  
-https://colour-science.github.io/colour-science-precis/
-
-E. J. Giorgianni and T. E. Madden, Digital Color Management: Encoding Solutions, Second Edition. Addison-Wesley Longman Publishing Co., Inc., 2008, ISBN: 978-0-470-51244-9
-
-ACES Technical Documentation  
-https://docs.acescentral.com/
-
-“SMPTE ST 2065-1:2012 – Academy Color Encoding Specification (ACES),” Society of Motion Picture and Television Engineers, New York, US, Standard, 2012
-
-“SMPTE RP 177-1993 – Derivation of Basic Television Color Equations,” Society of Motion Picture and Television Engineers, New York, US, Recommended Procedure, 1993 Beverly Hills, CA, Academy Procedure, Mar. 2016
-
-OpenColorIO  
-https://opencolorio.org/  
-
-
