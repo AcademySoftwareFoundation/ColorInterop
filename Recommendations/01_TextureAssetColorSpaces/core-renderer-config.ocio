@@ -278,14 +278,3 @@ colorspaces:
     isdata: false
     allocation: uniform
     to_scene_reference: !<ColorSpaceTransform> {src: srgb_rec709_scene, dst: lin_ap0_scene}
-
-  - !<ColorSpace>
-    name: Bypass
-    interop_id: bypass
-    family: ""
-    equalitygroup: ""
-    bitdepth: 32f
-    isdata: true
-    categories: [file-io]
-    encoding: data
-    allocation: uniform

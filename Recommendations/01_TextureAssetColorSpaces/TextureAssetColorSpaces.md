@@ -2,7 +2,7 @@
 
 **ASWF Color Interop Forum Recommendation** 
 
-*2026-06-16 v1.1.0*
+*2026-07-14 v1.1.0*
 
 ### Introduction
 
@@ -96,7 +96,6 @@ The following pieces of information are provided for each color space:
 | Gamma 2.2 Encoded AdobeRGB | `g22_adobergb_scene` | \~2.2 power | AdobeRGB | D65 | Scene-referred |
 | Data | `data` | n/a | n/a | n/a | n/a |
 | Unknown | `unknown` | n/a | n/a | n/a | n/a |
-| Bypass | `bypass` | n/a | n/a | n/a | n/a |
 
 #### Linear Color Space Encodings
 
@@ -293,7 +292,7 @@ The following pieces of information are provided for each color space:
 | Image State | n/a |
 | Rendering Space | No |
 | Basic | Yes |
-| Notes | This "color space" designation indicates that the asset it describes is actually not color data. For example, image file formats are often used to represent data such as normal maps which should not have any color conversions applied to them. A color space designation of `data` is an indication to the color management system that no conversion should be performed. <br><br> Alpha or matte values are not colors. If an image of alpha values is stored on its own, it would be appropriate to label it as `data`. However, if data is stored in RGBA form, the color space designation should be interpreted as only applying to the RGB part. The A part should be handled as if it were labeled `data`. |
+| Notes | This "color space" designation indicates that the asset it describes contains numeric rather than color values. For example, image file formats are often used to hold other three-dimensional data such as normal maps or spatial coordinates which should not have any color conversions applied to them. A color space designation of `data` is an indication to the color management system that no conversion should be performed. <br><br> Alpha or matte values are not colors. If an image of alpha values is stored on its own, it would be appropriate to label it as `data`. However, if data is stored in RGBA form, the color space designation should be interpreted as only applying to the RGB part. The A part should be handled as if it were labeled `data`. |
 | References |  |
 
 | Name | Unknown |
@@ -308,17 +307,6 @@ The following pieces of information are provided for each color space:
 | Notes | One of the anticipated primary uses of these recommendations is as values to set for the "color space" field in various file formats. Often such metadata is unreliable because software assigns an inaccurate color space as a default value. Therefore, it is essential that any set of color space designators provide a value that software developers may use to indicate that the true color space of the given asset is not known. |
 | References |  |
 
-| Name | Bypass |
-| :---- | :---- |
-| Interop ID | `bypass` |
-| Transfer Function | n/a |
-| Primaries | n/a |
-| White Point | n/a |
-| Image State | n/a |
-| Rendering Space | No |
-| Basic | No |
-| Notes | This designation is intended to support workflows where it is desired to defer tagging the image with its actual color space. This is different from `unknown` in that, whereas applications may write `unknown` if the color space is not known, an application should only write `bypass` if instructed to do so by an end-user. In other words, `bypass` is more of an intentional statement to delay color space assignment and this may be handled by downstream applications differently than `unknown`. |
-| References |  |
 
 ## Annexes
 
@@ -398,7 +386,7 @@ More detail about OCIO config files is available from the opencolorio.org websit
 | Date | Version | Notes |
 | :---- | :---- | :---- |
 |2024-10-07 | 1.0.0 | Initial release |
-|2026-06-16 | 1.1.0 | Add `g24_rec709_scene` and `bypass`. Harmonize terminology with other recommendations. |
+|2026-07-14 | 1.1.0 | Add `g24_rec709_scene`. Harmonize terminology with other recommendations. |
 
 
 ## General References
