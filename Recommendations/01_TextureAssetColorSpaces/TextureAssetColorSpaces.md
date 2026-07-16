@@ -2,7 +2,7 @@
 
 **ASWF Color Interop Forum Recommendation** 
 
-*2024-10-07 v1.0 FINAL*
+*2026-07-14 v1.1.0*
 
 ### Introduction
 
@@ -62,8 +62,8 @@ The following pieces of information are provided for each color space:
 
 | Component | Description |
 | :---- | :---- |
-| Name | This is the full name of the color space. It is recommended as the user-facing text that should be used in software user interfaces. For example, these are the names that users would see in the color space menus of an application that uses OpenColorIO. |
-| Compact Name | This is a shorter name that is intended to be used in file formats. These are constructed so that they are also suitable for use in file paths or as arguments to command-line tools or scripts. In the context of OpenColorIO, these are referred to as "aliases" for the full name but do not appear in user-facing menus. |
+| Name | This is the full name of the color space. It is recommended as the user-facing text that should be used in software user interfaces. For example, these are the names that users would see in the color space menus of an application that uses the OpenColorIO configs for ACES. |
+| Color Interop ID | This is a compact name that is intended to be used in file formats. These are constructed so that they are also suitable for use in file paths or as arguments to command-line tools or scripts. In the context of OpenColorIO, these are "aliases" for the full name and should not appear in user-facing menus. Please see the Recommendation "An ID for Color Interop" for details.|
 | Transfer Function | The transfer function is the non-linearity that is applied to the RGB values relative to a linear representation. Values are described as "linear" if they are proportional to light energy in the scene. A doubling of a linear value is equivalent to an increase of one photographic "stop". For non-linear transfer functions, the description provided is for the function to convert the non-linear encoding to a linear encoding (i.e., the EOTF). |
 | Primaries | The color primaries are the CIE 1931 xy chromaticity coordinates for red, green, and blue. The linear RGB values are tristimulus values in the specified coordinates. Positive RGB values define the gamut for those primaries. Note that since the linear color spaces are expected to be represented using floating-point numbers, colors outside the gamut of the primaries may be represented using a negative value for one or more of R, G, or B. However, since negative values tend to be problematic in CG rendering calculations, it is customary to only use positive values. |
 | White Point | The CIE 1931 xy chromaticity coordinates that the primaries are normalized to. This defines the white point of the viewing environment that the observer is adapted to. |
@@ -75,32 +75,33 @@ The following pieces of information are provided for each color space:
 
 ## Color Space Recommendations for Texture Assets and CG Rendering
 
-#### Summary Table — Overview of the Recommendations
+#### Summary Table — Overview of the Recommendation
 
-| Name | Compact Name | Transfer Function | Primaries | White Point | Image State |
+| Name | Interop ID | Transfer Function | Primaries | White Point | Image State |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| ACEScg | lin\_ap1\_scene | Linear | AP1 | D60 | Scene-referred |
-| ACES2065-1 | lin\_ap0\_scene | Linear | AP0 | D60 | Scene-referred |
-| Linear Rec.709 (sRGB) | lin\_rec709\_scene | Linear | Rec.709 | D65 | Scene-referred |
-| Linear P3-D65 | lin\_p3d65\_scene | Linear | DCI-P3 | D65 | Scene-referred |
-| Linear Rec.2020 | lin\_rec2020\_scene | Linear | Rec.2020 | D65 | Scene-referred |
-| Linear AdobeRGB | lin\_adobergb\_scene | Linear | AdobeRGB | D65 | Scene-referred |
-| CIE XYZ-D65 \- Scene-referred | lin\_ciexyzd65\_scene | Linear | XYZ 1931 | D65 | Scene-referred |
-| sRGB Encoded Rec.709 (sRGB) | srgb\_rec709\_scene | sRGB | Rec.709 | D65 | Scene-referred |
-| Gamma 2.2 Encoded Rec.709 | g22\_rec709\_scene | 2.2 power | Rec.709 | D65 | Scene-referred |
-| Gamma 1.8 Encoded Rec.709 | g18\_rec709\_scene | 1.8 power | Rec.709 | D65 | Scene-referred |
-| sRGB Encoded AP1 | srgb\_ap1\_scene | sRGB | AP1 | D60 | Scene-referred |
-| Gamma 2.2 Encoded AP1 | g22\_ap1\_scene | 2.2 power | AP1 | D60 | Scene-referred |
-| sRGB Encoded P3-D65 | srgb\_p3d65\_scene | sRGB | DCI-P3 | D65 | Scene-referred |
-| Gamma 2.2 Encoded AdobeRGB | g22\_adobergb\_scene | \~2.2 power | AdobeRGB | D65 | Scene-referred |
-| Data | data | n/a | n/a | n/a | n/a |
-| Unknown | unknown | n/a | n/a | n/a | n/a |
+| ACEScg | `lin_ap1_scene` | Linear | AP1 | D60 | Scene-referred |
+| ACES2065-1 | `lin_ap0_scene` | Linear | AP0 | D60 | Scene-referred |
+| Linear Rec.709 (sRGB) | `lin_rec709_scene` | Linear | Rec.709 | D65 | Scene-referred |
+| Linear P3-D65 | `lin_p3d65_scene` | Linear | DCI-P3 | D65 | Scene-referred |
+| Linear Rec.2020 | `lin_rec2020_scene` | Linear | Rec.2020 | D65 | Scene-referred |
+| Linear AdobeRGB | `lin_adobergb_scene` | Linear | AdobeRGB | D65 | Scene-referred |
+| CIE XYZ-D65 - Scene-referred | `lin_ciexyzd65_scene` | Linear | XYZ 1931 | D65 | Scene-referred |
+| sRGB Encoded Rec.709 (sRGB) | `srgb_rec709_scene` | sRGB | Rec.709 | D65 | Scene-referred |
+| Gamma 2.4 Encoded Rec.709 | `g24_rec709_scene` | 2.4 power | Rec.709 | D65 | Scene-referred |
+| Gamma 2.2 Encoded Rec.709 | `g22_rec709_scene` | 2.2 power | Rec.709 | D65 | Scene-referred |
+| Gamma 1.8 Encoded Rec.709 | `g18_rec709_scene` | 1.8 power | Rec.709 | D65 | Scene-referred |
+| sRGB Encoded AP1 | `srgb_ap1_scene` | sRGB | AP1 | D60 | Scene-referred |
+| Gamma 2.2 Encoded AP1 | `g22_ap1_scene` | 2.2 power | AP1 | D60 | Scene-referred |
+| sRGB Encoded P3-D65 | `srgb_p3d65_scene` | sRGB | DCI-P3 | D65 | Scene-referred |
+| Gamma 2.2 Encoded AdobeRGB | `g22_adobergb_scene` | \~2.2 power | AdobeRGB | D65 | Scene-referred |
+| Data | `data` | n/a | n/a | n/a | n/a |
+| Unknown | `unknown` | n/a | n/a | n/a | n/a |
 
 #### Linear Color Space Encodings
 
 | Name | ACEScg |
 | :---- | :---- |
-| Compact Name | lin\_ap1\_scene |
+| Interop ID | `lin_ap1_scene` |
 | Transfer Function | Linear |
 | Primaries | AP1 – R {x: 0.713, y: 0.293}, G {x: 0.165, y: 0.830}, B {x: 0.128, y: 0.044} |
 | White Point | D60 – {x: 0.32168, y: 0.33767} |
@@ -112,7 +113,7 @@ The following pieces of information are provided for each color space:
 
 | Name | ACES2065-1 |
 | :---- | :---- |
-| Compact Name | lin\_ap0\_scene |
+| Interop ID | `lin_ap0_scene` |
 | Transfer Function | Linear |
 | Primaries | AP0 – R {x: 0.7347, y: 0.2653}, G {x: 0.0, y: 1.0}, B {x: 0.0001, y: –0.0770} |
 | White Point | D60 – {x: 0.32168, y: 0.33767} |
@@ -124,7 +125,7 @@ The following pieces of information are provided for each color space:
 
 | Name | Linear Rec.709 (sRGB) |
 | :---- | :---- |
-| Compact Name | lin\_rec709\_scene |
+| Interop ID | `lin_rec709_scene` |
 | Transfer Function | Linear |
 | Primaries | Rec.709 – R {x: 0.640, y: 0.330}, G {x: 0.300, y: 0.600}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -136,7 +137,7 @@ The following pieces of information are provided for each color space:
 
 | Name | Linear P3-D65 |
 | :---- | :---- |
-| Compact Name | lin\_p3d65\_scene |
+| Interop ID | `lin_p3d65_scene` |
 | Transfer Function | Linear |
 | Primaries | DCI-P3 – R {x: 0.680, y: 0.320}, G {x: 0.265, y: 0.690}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -148,7 +149,7 @@ The following pieces of information are provided for each color space:
 
 | Name | Linear Rec.2020 |
 | :---- | :---- |
-| Compact Name | lin\_rec2020\_scene |
+| Interop ID | `lin_rec2020_scene` |
 | Transfer Function | Linear |
 | Primaries | Rec.2020 – R {x: 0.708, y: 0.292}, G {x: 0.170, y: 0.797}, B {x: 0.131, y: 0.046} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -160,7 +161,7 @@ The following pieces of information are provided for each color space:
 
 | Name | Linear AdobeRGB |
 | :---- | :---- |
-| Compact Name | lin\_adobergb\_scene |
+| Interop ID | `lin_adobergb_scene` |
 | Transfer Function | Linear |
 | Primaries | AdobeRGB – R {x: 0.640, y: 0.330}, G {x: 0.210, y: 0.710}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -172,7 +173,7 @@ The following pieces of information are provided for each color space:
 
 | Name | CIE XYZ-D65 \- Scene-referred |
 | :---- | :---- |
-| Compact Name | lin\_ciexyzd65\_scene |
+| Interop ID | `lin_ciexyzd65_scene` |
 | Transfer Function | Linear |
 | Primaries | CIE XYZ 1931 – R {x:1., y:0.}, G {x:0., y:1.}, B {x:0., y:0.} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -186,7 +187,7 @@ The following pieces of information are provided for each color space:
 
 | Name | sRGB Encoded Rec.709 (sRGB) |
 | :---- | :---- |
-| Compact Name | srgb\_rec709\_scene |
+| Interop ID | `srgb_rec709_scene` |
 | Transfer Function | sRGB (piecewise) |
 | Primaries | Rec.709 – R {x: 0.640, y: 0.330}, G {x: 0.300, y: 0.600}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -196,9 +197,21 @@ The following pieces of information are provided for each color space:
 | Notes | This is a scene-referred version of the sRGB color space. Please see Annex B for details. |
 | References | https://www.colour-science.org/posts/srgb-eotf-pure-gamma-22-or-piece-wise-function/ <br><br> IEC 61966-2-1:1999 |
 
+| Name | Gamma 2.4 Encoded Rec.709 |
+| :---- | :---- |
+| Interop ID | `g24_rec709_scene` |
+| Transfer Function | Power function with exponent: 2.4 |
+| Primaries | Rec.709 – R {x: 0.640, y: 0.330}, G {x: 0.300, y: 0.600}, B {x: 0.150, y: 0.060} |
+| White Point | D65 – {x: 0.3127, y: 0.3290} |
+| Image State | Scene-referred |
+| Rendering Space | No |
+| Basic | No |
+| Notes | Although this is mathematically similar to the transform for a Rec.1886/Rec.709 monitor, this color space is scene-referred. For the actual standard, display-referred color space, please see `g24_rec709_display` in the recommendation "Color Space Encodings for Displays." |
+| References | There is no color space encoding specification, but the primaries may be found in: https://www.itu.int/rec/R-REC-BT.709 |
+
 | Name | Gamma 2.2 Encoded Rec.709 |
 | :---- | :---- |
-| Compact Name | g22\_rec709\_scene |
+| Interop ID | `g22_rec709_scene` |
 | Transfer Function | Power function with exponent: 2.2 |
 | Primaries | Rec.709 – R {x: 0.640, y: 0.330}, G {x: 0.300, y: 0.600}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -210,7 +223,7 @@ The following pieces of information are provided for each color space:
 
 | Name | Gamma Encoded 1.8 Rec.709 |
 | :---- | :---- |
-| Compact Name | g18\_rec709\_scene |
+| Interop ID | `g18_rec709_scene` |
 | Transfer Function | Power function with exponent: 1.8 |
 | Primaries | Rec.709 – R {x: 0.640, y: 0.330}, G {x: 0.300, y: 0.600}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -222,7 +235,7 @@ The following pieces of information are provided for each color space:
 
 | Name | sRGB Encoded AP1 |
 | :---- | :---- |
-| Compact Name | srgb\_ap1\_scene |
+| Interop ID | `srgb_ap1_scene` |
 | Transfer Function | sRGB (piecewise) |
 | Primaries | AP1 – R {x: 0.713, y: 0.293}, G {x: 0.165, y: 0.830}, B {x: 0.128, y: 0.044} |
 | White Point | D60 – {x: 0.32168, y: 0.33767} |
@@ -234,7 +247,7 @@ The following pieces of information are provided for each color space:
 
 | Name | Gamma Encoded 2.2 AP1 |
 | :---- | :---- |
-| Compact Name | g22\_ap1\_scene |
+| Interop ID | `g22_ap1_scene` |
 | Transfer Function | Power function with exponent: 2.2 |
 | Primaries | AP1 – R {x: 0.713, y: 0.293}, G {x: 0.165, y: 0.830}, B {x: 0.128, y: 0.044} |
 | White Point | D60 – {x: 0.32168, y: 0.33767} |
@@ -246,7 +259,7 @@ The following pieces of information are provided for each color space:
 
 | Name | sRGB Encoded P3-D65 |
 | :---- | :---- |
-| Compact Name | srgb\_p3d65\_scene |
+| Interop ID | `srgb_p3d65_scene` |
 | Transfer Function | sRGB (piecewise) |
 | Primaries | DCI-P3 – R {x: 0.680, y: 0.320}, G {x: 0.265, y: 0.690}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -258,7 +271,7 @@ The following pieces of information are provided for each color space:
 
 | Name | Gamma 2.2 Encoded AdobeRGB |
 | :---- | :---- |
-| Compact Name | g22\_adobergb\_scene |
+| Interop ID | `g22_adobergb_scene` |
 | Transfer Function | Power function with exponent: 563 / 256 |
 | Primaries | AdobeRGB – R {x: 0.640, y: 0.330}, G {x: 0.210, y: 0.710}, B {x: 0.150, y: 0.060} |
 | White Point | D65 – {x: 0.3127, y: 0.3290} |
@@ -272,19 +285,19 @@ The following pieces of information are provided for each color space:
 
 | Name | Data |
 | :---- | :---- |
-| Compact Name | data |
+| Interop ID | `data` |
 | Transfer Function | n/a |
 | Primaries | n/a |
 | White Point | n/a |
 | Image State | n/a |
 | Rendering Space | No |
 | Basic | Yes |
-| Notes | This "color space" designation indicates that the asset it describes is actually not color data. For example, image file formats are often used to represent data such as normal maps which should not have any color conversions applied to them. A color space designation of "data" is an indication to the color management system that no conversion should be performed. <br><br> Alpha or matte values are not colors. If an image of alpha values is stored on its own, it would be appropriate to label it as "data". However, if data is stored in RGBA form, the color space designation should be interpreted as only applying to the RGB part. The A part should be handled as if it were labeled "data". |
+| Notes | This "color space" designation indicates that the asset it describes contains numeric rather than color values. For example, image file formats are often used to hold other three-dimensional data such as normal maps or spatial coordinates which should not have any color conversions applied to them. A color space designation of `data` is an indication to the color management system that no conversion should be performed. <br><br> Alpha or matte values are not colors. If an image of alpha values is stored on its own, it would be appropriate to label it as `data`. However, if an image is stored in RGBA form, the color space designation should be interpreted as only applying to the RGB part. The A part should be handled as if it were labeled `data`. |
 | References |  |
 
 | Name | Unknown |
 | :---- | :---- |
-| Compact Name | unknown |
+| Interop ID | `unknown` |
 | Transfer Function | n/a |
 | Primaries | n/a |
 | White Point | n/a |
@@ -293,6 +306,32 @@ The following pieces of information are provided for each color space:
 | Basic | No |
 | Notes | One of the anticipated primary uses of these recommendations is as values to set for the "color space" field in various file formats. Often such metadata is unreliable because software assigns an inaccurate color space as a default value. Therefore, it is essential that any set of color space designators provide a value that software developers may use to indicate that the true color space of the given asset is not known. |
 | References |  |
+
+
+## General References
+
+Color Interop Forum Recommendation ["Color Space Encodings for Displays"](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/02_DisplayColorSpaces/DisplayColorSpaces.md)
+
+Color Interop Forum: [An ID for Color Interop](https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/03_ColorInteropID/ColorInteropID.md)
+
+ISO 22028-1:2016 Photography and graphic technology — Extended colour encodings for digital image storage, manipulation and interchange, Part 1: Architecture and requirements  
+https://www.iso.org/standard/68761.html
+
+Colour Science Precis for the CGI Artist  
+https://colour-science.github.io/colour-science-precis/
+
+E. J. Giorgianni and T. E. Madden, Digital Color Management: Encoding Solutions, Second Edition. Addison-Wesley Longman Publishing Co., Inc., 2008, ISBN: 978-0-470-51244-9
+
+ACES Technical Documentation  
+https://docs.acescentral.com/
+
+“SMPTE ST 2065-1:2012 – Academy Color Encoding Specification (ACES),” Society of Motion Picture and Television Engineers, New York, US, Standard, 2012
+
+“SMPTE RP 177-1993 – Derivation of Basic Television Color Equations,” Society of Motion Picture and Television Engineers, New York, US, Recommended Procedure, 1993 Beverly Hills, CA, Academy Procedure, Mar. 2016
+
+OpenColorIO  
+https://opencolorio.org/  
+
 
 ## Annexes
 
@@ -343,17 +382,17 @@ The EOTF transfer function then becomes:
     else
         out = pow((in + k) / (1. + k), g)
 
-### Annex C: Structure of the Compact Names
+### Annex C: Structure of the Color Interop ID Names
 
-The compact names were the subject of intense discussion during Color Interop Forum meetings. The result is a compromise which tries to balance many different requirements and opinions. The structure uses an "analytical" approach that includes three components: the transfer function, the gamut (or primaries), and the image state.
+These compact names were the subject of intense discussion during Color Interop Forum meetings. The result is a compromise which tries to balance many different requirements and opinions. The structure uses an "analytical" approach that includes three components: the transfer function, the gamut (or primaries), and the image state.
 
 White point is another aspect that was discussed by the working group. However, in the interest of trying to keep the names more compact, it was decided not to have a separate analytic component for the adaptive white point because the standards for the primaries typically have an associated white point. It is therefore omitted from most of the names (where the white point is essentially communicated via the primaries) and only added to the gamut component of the name where it would otherwise be ambiguous.
 
 The transfer function was put first since this is the structure that was already being used in the OCIO configs for ACES, which in turn was influenced by the ACES system where digital cinema camera names followed this form. This ordering is also what has been used in the MaterialX specification. 
 
-Although all of the color space encodings defined in the present document are scene-referred, the plan is to add additional recommendations that would include display-referred color spaces. Thus, it is essential to have a way to disambiguate identical mathematical representations that appear with both image states. For example, once the full list has been produced, there will be both an "srgb\_rec709\_scene" and a "srgb\_rec709\_display". Moreover, given that the OCIO configs for ACES currently have both versions, the need for both exists already on the OCIO side.
+Although all of the color space encodings defined in the present document are scene-referred, the plan was always to add additional recommendations that would include display-referred color spaces (this has now been done). Thus, it was essential to have a way to disambiguate identical mathematical representations that appear with both image states. For example, across the various recommendations, there is both an `srgb_rec709_scene` and an `srgb_rec709_display`. Moreover, given that the OCIO configs for ACES already had both versions, the need for both existed already on the OCIO side.
 
-Finally, the goal is that the compact names will become keywords in OpenColorIO that will not be possible to override, so there was a desire to avoid collision with certain frequently used names.
+Finally, the goal is that eventually the interop IDs may become keywords in OpenColorIO that will not be possible to override, so there was a desire to avoid collision with certain frequently used names.
 
 ### Annex D: OCIO Reference Config
 
@@ -367,25 +406,9 @@ The MatrixTransform in OCIO is a 4x4 matrix, converting RGBA to RGBA. The orderi
 
 More detail about OCIO config files is available from the opencolorio.org website.
 
+### Annex E: Revision History
 
-## General References
-
-ISO 22028-1:2016 Photography and graphic technology — Extended colour encodings for digital image storage, manipulation and interchange, Part 1: Architecture and requirements  
-https://www.iso.org/standard/68761.html
-
-Colour Science Precis for the CGI Artist  
-https://colour-science.github.io/colour-science-precis/
-
-E. J. Giorgianni and T. E. Madden, Digital Color Management: Encoding Solutions, Second Edition. Addison-Wesley Longman Publishing Co., Inc., 2008, ISBN: 978-0-470-51244-9
-
-ACES Technical Documentation  
-https://docs.acescentral.com/
-
-“SMPTE ST 2065-1:2012 – Academy Color Encoding Specification (ACES),” Society of Motion Picture and Television Engineers, New York, US, Standard, 2012
-
-“SMPTE RP 177-1993 – Derivation of Basic Television Color Equations,” Society of Motion Picture and Television Engineers, New York, US, Recommended Procedure, 1993 Beverly Hills, CA, Academy Procedure, Mar. 2016
-
-OpenColorIO  
-https://opencolorio.org/  
-
-
+| Date | Version | Notes |
+| :---- | :---- | :---- |
+|2024-10-07 | 1.0.0 | Initial release |
+|2026-07-14 | 1.1.0 | Add `g24_rec709_scene`. Harmonize terminology with other recommendations. |
