@@ -292,7 +292,7 @@ The following pieces of information are provided for each color space:
 | Image State | n/a |
 | Rendering Space | No |
 | Basic | Yes |
-| Notes | This "color space" designation indicates that the asset it describes contains numeric rather than color values. For example, image file formats are often used to hold other three-dimensional data such as normal maps or spatial coordinates which should not have any color conversions applied to them. A color space designation of `data` is an indication to the color management system that no conversion should be performed. <br><br> Alpha or matte values are not colors. If an image of alpha values is stored on its own, it would be appropriate to label it as `data`. However, if data is stored in RGBA form, the color space designation should be interpreted as only applying to the RGB part. The A part should be handled as if it were labeled `data`. |
+| Notes | This "color space" designation indicates that the asset it describes contains numeric rather than color values. For example, image file formats are often used to hold other three-dimensional data such as normal maps or spatial coordinates which should not have any color conversions applied to them. A color space designation of `data` is an indication to the color management system that no conversion should be performed. <br><br> Alpha or matte values are not colors. If an image of alpha values is stored on its own, it would be appropriate to label it as `data`. However, if an image is stored in RGBA form, the color space designation should be interpreted as only applying to the RGB part. The A part should be handled as if it were labeled `data`. |
 | References |  |
 
 | Name | Unknown |
@@ -390,9 +390,9 @@ White point is another aspect that was discussed by the working group. However, 
 
 The transfer function was put first since this is the structure that was already being used in the OCIO configs for ACES, which in turn was influenced by the ACES system where digital cinema camera names followed this form. This ordering is also what has been used in the MaterialX specification. 
 
-Although all of the color space encodings defined in the present document are scene-referred, the plan was to add additional recommendations that would include display-referred color spaces (this has now been done). Thus, it is essential to have a way to disambiguate identical mathematical representations that appear with both image states. For example, across the various recommendations, there is both an `srgb_rec709_scene` and an `srgb_rec709_display`. Moreover, given that the OCIO configs for ACES currently have both versions, the need for both exists already on the OCIO side.
+Although all of the color space encodings defined in the present document are scene-referred, the plan was always to add additional recommendations that would include display-referred color spaces (this has now been done). Thus, it was essential to have a way to disambiguate identical mathematical representations that appear with both image states. For example, across the various recommendations, there is both an `srgb_rec709_scene` and an `srgb_rec709_display`. Moreover, given that the OCIO configs for ACES already had both versions, the need for both existed already on the OCIO side.
 
-Finally, the goal is that eventually the Interop IDs may become keywords in OpenColorIO that will not be possible to override, so there was a desire to avoid collision with certain frequently used names.
+Finally, the goal is that eventually the interop IDs may become keywords in OpenColorIO that will not be possible to override, so there was a desire to avoid collision with certain frequently used names.
 
 ### Annex D: OCIO Reference Config
 
